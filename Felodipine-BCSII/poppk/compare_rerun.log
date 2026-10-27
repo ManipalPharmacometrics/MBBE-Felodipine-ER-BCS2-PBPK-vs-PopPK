@@ -1,0 +1,63 @@
+
+Simulated BE boundaries (GMR leaves [0.80, 1.25]):
+12×5 DataFrame
+ Row │ axis    endpoint  side    PBPK           PopPK
+     │ String  String    String  Float64?       Float64?
+─────┼────────────────────────────────────────────────────────
+   1 │ T50     Cmax      low           3.25228        2.7786
+   2 │ T50     AUC_tEnd  low     missing        missing
+   3 │ T50     Joint     low           3.25228        2.7786
+   4 │ T50     Cmax      high          6.96013        6.45436
+   5 │ T50     AUC_tEnd  high    missing        missing
+   6 │ T50     Joint     high          6.96013        6.45436
+   7 │ shape   Cmax      low     missing        missing
+   8 │ shape   AUC_tEnd  low     missing        missing
+   9 │ shape   Joint     low     missing        missing
+  10 │ shape   Cmax      high          1.46466  missing
+  11 │ shape   AUC_tEnd  high    missing        missing
+  12 │ shape   Joint     high          1.46466  missing
+
+Type I error (20000 trials), PBPK truth at PopPK's boundary = T1_at_other_bnd on PBPK rows:
+20×10 DataFrame
+ Row │ axis    endpoint  side    n      judged_by  own_bnd  T1_own   other_bnd ⋯
+     │ String  String    String  Int64  String     Float64  Float64  Float64?  ⋯
+─────┼──────────────────────────────────────────────────────────────────────────
+   1 │ T50     Cmax      low        24  PBPK       3.25228  0.0491         2.7 ⋯
+   2 │ T50     Cmax      low        24  PopPK      2.7786   0.04845        3.2
+   3 │ T50     Cmax      low        54  PBPK       3.25228  0.0514         2.7
+   4 │ T50     Cmax      low        54  PopPK      2.7786   0.05045        3.2
+   5 │ T50     Cmax      high       24  PBPK       6.96013  0.04695        6.4 ⋯
+   6 │ T50     Cmax      high       24  PopPK      6.45436  0.04595        6.9
+   7 │ T50     Cmax      high       54  PBPK       6.96013  0.0498         6.4
+   8 │ T50     Cmax      high       54  PopPK      6.45436  0.0491         6.9
+   9 │ T50     Joint     low        24  PBPK       3.25228  0.03785        2.7 ⋯
+  10 │ T50     Joint     low        24  PopPK      2.7786   0.02925        3.2
+  11 │ T50     Joint     low        54  PBPK       3.25228  0.04955        2.7
+  12 │ T50     Joint     low        54  PopPK      2.7786   0.0485         3.2
+  13 │ T50     Joint     high       24  PBPK       6.96013  0.03705        6.4 ⋯
+  14 │ T50     Joint     high       24  PopPK      6.45436  0.03945        6.9
+  15 │ T50     Joint     high       54  PBPK       6.96013  0.04545        6.4
+  16 │ T50     Joint     high       54  PopPK      6.45436  0.04575        6.9
+  17 │ shape   Cmax      high       24  PBPK       1.46466  0.049    missing   ⋯
+  18 │ shape   Cmax      high       54  PBPK       1.46466  0.0508   missing
+  19 │ shape   Joint     high       24  PBPK       1.46466  0.0331   missing
+  20 │ shape   Joint     high       54  PBPK       1.46466  0.0486   missing
+                                                               3 columns omitted
+
+RSABE / ABEL acceptance at the ABE Cmax boundary (true GMR 0.80 or 1.25):
+10×8 DataFrame
+ Row │ axis    source  side    bnd      limit   method     n      accept
+     │ String  String  String  Float64  String  String     Int64  Float64
+─────┼────────────────────────────────────────────────────────────────────
+   1 │ T50     PBPK    low     3.25228  1.25    fda_rsabe     24  0.22175
+   2 │ T50     PBPK    low     3.25228  1.25    ema_abel      24  0.13875
+   3 │ T50     PBPK    high    6.96013  0.80    fda_rsabe     24  0.202
+   4 │ T50     PBPK    high    6.96013  0.80    ema_abel      24  0.128
+   5 │ T50     PopPK   low     2.7786   1.25    fda_rsabe     24  0.2173
+   6 │ T50     PopPK   low     2.7786   1.25    ema_abel      24  0.13485
+   7 │ T50     PopPK   high    6.45436  0.80    fda_rsabe     24  0.19885
+   8 │ T50     PopPK   high    6.45436  0.80    ema_abel      24  0.12755
+   9 │ shape   PBPK    high    1.46466  1.25    fda_rsabe     24  0.2198
+  10 │ shape   PBPK    high    1.46466  1.25    ema_abel      24  0.13785
+
+Wrote CSVs and figures to ../Felodipine-BCSII/poppk/output_rich/compare

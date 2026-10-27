@@ -1,0 +1,20 @@
+<section id="sweep" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">T50 × shape sweep · done 16 Oct</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#14213D">27 population runs: a coarse cross, then a 2-D fill</h2>
+<div style="display:flex;gap:56px;align-items:start">
+<table style="flex:1;font-size:26px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#E6EAF0"><th style="width:24%">Scan</th><th style="width:46%">Values</th><th style="width:30%">Held at</th></tr>
+<tr><td>T50</td><td>143, 201, 244, <b>287</b>, 344, 430, 574 min (×0.5 to ×2)</td><td>shape 0.764</td></tr>
+<tr><td>Shape</td><td>0.5, 0.6, <b>0.764</b>, 0.9, 1.0, 1.2, 1.5</td><td>T50 287 min</td></tr>
+<tr><td>2-D fill</td><td>244, 265, 316, 344, 379, 413 min × shapes 0.6–1.2</td><td>around the band</td></tr>
+<tr><td>Lag</td><td>18.68 min</td><td>all runs</td></tr>
+</table>
+<div style="width:600px;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:28px;line-height:1.45"><b>Population:</b> 100 healthy adults, 18–55 y, BMI 18.5–30, 50% female. The same 100 in every run, so test vs reference is paired.</p>
+<p style="font-size:28px;line-height:1.45"><b>Why 100, not 24:</b> felodipine needs n ≈ 52–56 per trial, so bootstrapping from 24 physiologies would repeat subjects heavily.</p>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.45">Exports per run: <b>Pop_T50_&lt;h&gt;h_b&lt;shape&gt;</b>-Results.csv and -PK-Analyses.csv, the same pair as metformin, analysed with the shared be_utils.jl (drug key, shape parser, WSV per drug × arm × endpoint, RSABE).</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">project notes §9.6, §9.17–9.20 · planning notes §2.2, §5.1, §7</p>
+<aside>The 2-D fill comes after the coarse cross shows where the BE boundaries sit, the same iterative approach as the metformin T50 sweep. The high first-pass (F about 15 percent) may make Cmax touchy, so a finer grid near the boundaries may be needed. Gate 1 before any population run: the new individual, run as a single simulation, has to reproduce the colon-50 clone (Cmax about 4.59 nM, F about 0.176).</aside>
+</section>

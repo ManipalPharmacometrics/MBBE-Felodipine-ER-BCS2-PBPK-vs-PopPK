@@ -1,0 +1,142 @@
+Formulations: 27   ref (T50 = 4.78, shape = 0.764)   arm fasted   n(2x2) = 54
+
+axis     T50  shape |   GMR_C   GMR_A |  ABE_C  ABE_A  joint |  RSABE   ABEL
+shape   4.78  0.500 |   0.984   0.926 |  0.875  0.896  0.797 |  0.960  0.933
+shape   4.07  0.600 |   1.020   1.014 |  0.877  0.997  0.879 |  0.958  0.935
+shape   4.78  0.600 |   0.952   0.988 |  0.809  0.996  0.813 |  0.926  0.874
+shape   5.74  0.600 |   0.877   0.955 |  0.361  0.970  0.379 |  0.627  0.507
+shape   6.31  0.600 |   0.848   0.944 |  0.204  0.958  0.200 |  0.456  0.331
+T50     2.39  0.764 |   1.314   1.081 |  0.008  0.902  0.006 |  0.070  0.032
+T50     3.35  0.764 |   1.175   1.053 |  0.243  0.970  0.211 |  0.504  0.387
+T50     4.07  0.764 |   1.084   1.030 |  0.695  0.991  0.663 |  0.845  0.779
+T50     4.42  0.764 |   1.038   1.015 |  0.851  0.997  0.852 |  0.941  0.921
+ref     4.78  0.764 |   1.000   1.000 |  0.899  0.998  0.899 |  0.970  0.945
+T50     5.26  0.764 |   0.951   0.990 |  0.791  0.996  0.800 |  0.920  0.875
+T50     5.74  0.764 |   0.909   0.974 |  0.591  0.992  0.599 |  0.797  0.710
+T50     7.17  0.764 |   0.714   0.972 |  0.000  0.989  0.001 |  0.011  0.003
+T50     9.56  0.764 |   0.599   0.934 |  0.000  0.923  0.000 |  0.000  0.000
+shape   4.07  0.900 |   1.117   1.034 |  0.517  0.990  0.481 |  0.738  0.642
+shape   4.78  0.900 |   1.039   1.026 |  0.852  0.996  0.843 |  0.946  0.924
+shape   5.74  0.900 |   0.938   0.997 |  0.746  0.997  0.756 |  0.887  0.836
+shape   4.07  1.000 |   1.126   1.052 |  0.481  0.972  0.430 |  0.703  0.608
+shape   4.78  1.000 |   1.048   1.038 |  0.833  0.987  0.813 |  0.931  0.904
+shape   5.74  1.000 |   0.949   1.016 |  0.790  0.997  0.791 |  0.918  0.865
+shape   6.31  1.000 |   0.777   1.012 |  0.016  0.998  0.013 |  0.106  0.071
+shape   4.07  1.200 |   1.156   1.058 |  0.317  0.960  0.277 |  0.591  0.480
+shape   4.78  1.200 |   1.079   1.046 |  0.711  0.980  0.665 |  0.859  0.795
+shape   5.74  1.200 |   0.996   1.042 |  0.889  0.982  0.885 |  0.965  0.934
+shape   6.31  1.200 |   0.931   1.024 |  0.713  0.995  0.721 |  0.865  0.809
+shape   6.88  1.200 |   0.879   1.023 |  0.377  0.996  0.405 |  0.640  0.516
+shape   4.78  1.500 |   1.129   1.070 |  0.447  0.939  0.396 |  0.694  0.588
+
+Wrote CSVs to ../Felodipine-BCSII/poppk/output_sweep_2d_poppk
+Calibrated vs simulated joint ABE power at the 27 points: max |diff| 0.037, median 0.011
+17×8 DataFrame
+ Row │ method            shape    T50_lo   T50_hi   ratio_lo  ratio_hi  open_lo  open_hi
+     │ String            Float64  Float64  Float64  Float64   Float64   Bool     Bool
+─────┼───────────────────────────────────────────────────────────────────────────────────
+   1 │ ABE (2x2, n=54)     0.6      3.91     4.785  0.817992   1.00105    false    false
+   2 │ ABE (2x2, n=54)     0.764    4.32     5.245  0.903766   1.09728    false    false
+   3 │ ABE (2x2, n=54)     0.9      4.665    5.595  0.975941   1.1705     false    false
+   4 │ ABE (2x2, n=54)     1.0      4.765    5.71   0.996862   1.19456    false    false
+   5 │ ABE (2x2, n=54)     1.2      5.095    6.11   1.0659     1.27824    false    false
+   6 │ EMA ABEL (n=24)     0.5      4.78     4.78   1.0        1.0         true     true
+   7 │ EMA ABEL (n=24)     0.6      3.775    5.06   0.789749   1.05858    false    false
+   8 │ EMA ABEL (n=24)     0.764    4.12     5.51   0.861925   1.15272    false    false
+   9 │ EMA ABEL (n=24)     0.9      4.41     5.765  0.922594   1.20607    false    false
+  10 │ EMA ABEL (n=24)     1.0      4.495    5.8    0.940377   1.21339    false    false
+  11 │ EMA ABEL (n=24)     1.2      4.8      6.335  1.00418    1.32531    false    false
+  12 │ FDA RSABE (n=24)    0.5      4.78     4.78   1.0        1.0         true     true
+  13 │ FDA RSABE (n=24)    0.6      3.68     5.285  0.769874   1.10565     true    false
+  14 │ FDA RSABE (n=24)    0.764    3.935    5.725  0.823222   1.1977     false    false
+  15 │ FDA RSABE (n=24)    0.9      4.22     5.82   0.882845   1.21757    false    false
+  16 │ FDA RSABE (n=24)    1.0      4.295    5.855  0.898536   1.2249     false    false
+  17 │ FDA RSABE (n=24)    1.2      4.58     6.53   0.958159   1.36611    false    false
+Wrote ../Felodipine-BCSII/poppk/output_sweep_2d_poppk/fig_safespace_2d_joint.png
+Calibrated vs simulated joint ABE power at the 27 points: max |diff| 0.035, median 0.009
+Calibrated vs simulated joint ABE power at the 27 points: max |diff| 0.037, median 0.011
+15×8 DataFrame
+ Row │ method            shape    T50_lo   T50_hi   ratio_lo  ratio_hi  open_lo  open_hi
+     │ String            Float64  Float64  Float64  Float64   Float64   Bool     Bool
+─────┼───────────────────────────────────────────────────────────────────────────────────
+   1 │ ABE (2x2, n=54)     0.6      5.25     5.84   1.09833    1.22176    false    false
+   2 │ ABE (2x2, n=54)     0.764    4.37     5.225  0.914226   1.0931     false    false
+   3 │ ABE (2x2, n=54)     0.9      4.465    5.275  0.9341     1.10356    false    false
+   4 │ ABE (2x2, n=54)     1.0      4.67     5.485  0.976987   1.14749    false    false
+   5 │ ABE (2x2, n=54)     1.2      5.24     6.095  1.09623    1.2751     false    false
+   6 │ EMA ABEL (n=24)     0.6      4.9      6.31   1.0251     1.32008    false     true
+   7 │ EMA ABEL (n=24)     0.764    4.19     5.455  0.876569   1.14121    false    false
+   8 │ EMA ABEL (n=24)     0.9      4.29     5.49   0.89749    1.14854    false    false
+   9 │ EMA ABEL (n=24)     1.0      4.485    5.7    0.938285   1.19247    false    false
+  10 │ EMA ABEL (n=24)     1.2      5.035    6.325  1.05335    1.32322    false    false
+  11 │ FDA RSABE (n=24)    0.6      4.73     6.31   0.98954    1.32008    false     true
+  12 │ FDA RSABE (n=24)    0.764    4.065    5.625  0.850418   1.17678    false    false
+  13 │ FDA RSABE (n=24)    0.9      4.16     5.655  0.870293   1.18305    false    false
+  14 │ FDA RSABE (n=24)    1.0      4.36     5.865  0.912134   1.22699    false    false
+  15 │ FDA RSABE (n=24)    1.2      4.9      6.495  1.0251     1.35879    false    false
+Wrote ../Felodipine-BCSII/output_sweep_2d/fig_safespace_2d_overlay_PopPK.png
+Per-subject PopPK/PBPK: Cmax GM 1.036 (arms 0.872-1.135), AUC_0-t GM 0.988 (arms 0.966-1.020)
+Wrote diagnostics to ../Felodipine-BCSII/poppk/output_rich/diagnostics
+
+Simulated BE boundaries (GMR leaves [0.80, 1.25]):
+12×5 DataFrame
+ Row │ axis    endpoint  side    PBPK           PopPK
+     │ String  String    String  Float64?       Float64?
+─────┼────────────────────────────────────────────────────────
+   1 │ T50     Cmax      low           3.25228        2.7786
+   2 │ T50     AUC_tEnd  low     missing        missing
+   3 │ T50     Joint     low           3.25228        2.7786
+   4 │ T50     Cmax      high          6.96013        6.45436
+   5 │ T50     AUC_tEnd  high    missing        missing
+   6 │ T50     Joint     high          6.96013        6.45436
+   7 │ shape   Cmax      low     missing        missing
+   8 │ shape   AUC_tEnd  low     missing        missing
+   9 │ shape   Joint     low     missing        missing
+  10 │ shape   Cmax      high          1.46466  missing
+  11 │ shape   AUC_tEnd  high    missing        missing
+  12 │ shape   Joint     high          1.46466  missing
+
+Type I error (20000 trials), PBPK truth at PopPK's boundary = T1_at_other_bnd on PBPK rows:
+20×10 DataFrame
+ Row │ axis    endpoint  side    n      judged_by  own_bnd  T1_own   other_bnd ⋯
+     │ String  String    String  Int64  String     Float64  Float64  Float64?  ⋯
+─────┼──────────────────────────────────────────────────────────────────────────
+   1 │ T50     Cmax      low        24  PBPK       3.25228  0.0491         2.7 ⋯
+   2 │ T50     Cmax      low        24  PopPK      2.7786   0.04845        3.2
+   3 │ T50     Cmax      low        54  PBPK       3.25228  0.0514         2.7
+   4 │ T50     Cmax      low        54  PopPK      2.7786   0.05045        3.2
+   5 │ T50     Cmax      high       24  PBPK       6.96013  0.04695        6.4 ⋯
+   6 │ T50     Cmax      high       24  PopPK      6.45436  0.04595        6.9
+   7 │ T50     Cmax      high       54  PBPK       6.96013  0.0498         6.4
+   8 │ T50     Cmax      high       54  PopPK      6.45436  0.0491         6.9
+   9 │ T50     Joint     low        24  PBPK       3.25228  0.03785        2.7 ⋯
+  10 │ T50     Joint     low        24  PopPK      2.7786   0.02925        3.2
+  11 │ T50     Joint     low        54  PBPK       3.25228  0.04955        2.7
+  12 │ T50     Joint     low        54  PopPK      2.7786   0.0485         3.2
+  13 │ T50     Joint     high       24  PBPK       6.96013  0.03705        6.4 ⋯
+  14 │ T50     Joint     high       24  PopPK      6.45436  0.03945        6.9
+  15 │ T50     Joint     high       54  PBPK       6.96013  0.04545        6.4
+  16 │ T50     Joint     high       54  PopPK      6.45436  0.04575        6.9
+  17 │ shape   Cmax      high       24  PBPK       1.46466  0.049    missing   ⋯
+  18 │ shape   Cmax      high       54  PBPK       1.46466  0.0508   missing
+  19 │ shape   Joint     high       24  PBPK       1.46466  0.0331   missing
+  20 │ shape   Joint     high       54  PBPK       1.46466  0.0486   missing
+                                                               3 columns omitted
+
+RSABE / ABEL acceptance at the ABE Cmax boundary (true GMR 0.80 or 1.25):
+10×8 DataFrame
+ Row │ axis    source  side    bnd      limit   method     n      accept
+     │ String  String  String  Float64  String  String     Int64  Float64
+─────┼────────────────────────────────────────────────────────────────────
+   1 │ T50     PBPK    low     3.25228  1.25    fda_rsabe     24  0.22175
+   2 │ T50     PBPK    low     3.25228  1.25    ema_abel      24  0.13875
+   3 │ T50     PBPK    high    6.96013  0.80    fda_rsabe     24  0.202
+   4 │ T50     PBPK    high    6.96013  0.80    ema_abel      24  0.128
+   5 │ T50     PopPK   low     2.7786   1.25    fda_rsabe     24  0.2173
+   6 │ T50     PopPK   low     2.7786   1.25    ema_abel      24  0.13485
+   7 │ T50     PopPK   high    6.45436  0.80    fda_rsabe     24  0.19885
+   8 │ T50     PopPK   high    6.45436  0.80    ema_abel      24  0.12755
+   9 │ shape   PBPK    high    1.46466  1.25    fda_rsabe     24  0.2198
+  10 │ shape   PBPK    high    1.46466  1.25    ema_abel      24  0.13785
+
+Wrote CSVs and figures to ../Felodipine-BCSII/poppk/output_rich/compare

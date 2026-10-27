@@ -1,0 +1,21 @@
+<section id="poppkmethod" data-transition="fade" style="background:#ECEEF1;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">PopPK · method</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:56px;font-weight:600;line-height:1.15;color:#14213D">The metformin pipeline, rerun on the felodipine truth</h2>
+<div style="display:flex;gap:12px;align-items:center">
+<div style="width:270px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:24px;border:1px solid #DCE1E8;border-radius:12px"><h3 style="font-size:28px;font-weight:600;color:#2A78D6">PK-Sim truth</h3><p style="font-size:24px;line-height:1.35">27 arms × 100 subjects, 0–96 h</p></div>
+<x-shape kind="arrow-right" style="background:#8A94A6;width:48px;height:24px"></x-shape>
+<div style="width:270px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:24px;border:1px solid #DCE1E8;border-radius:12px"><h3 style="font-size:28px;font-weight:600;color:#14213D">BE study</h3><p style="font-size:24px;line-height:1.35">18 samples, 0.5–96 h, 15% proportional error</p></div>
+<x-shape kind="arrow-right" style="background:#8A94A6;width:48px;height:24px"></x-shape>
+<div style="width:270px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:24px;border:1px solid #DCE1E8;border-radius:12px"><h3 style="font-size:28px;font-weight:600;color:#C8641E">PopPK per arm</h3><p style="font-size:24px;line-height:1.35">M5: dual Weibull → ka → 2-cmt, FOCE</p></div>
+<x-shape kind="arrow-right" style="background:#8A94A6;width:48px;height:24px"></x-shape>
+<div style="width:270px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:24px;border:1px solid #DCE1E8;border-radius:12px"><h3 style="font-size:28px;font-weight:600;color:#14213D">NCA</h3><p style="font-size:24px;line-height:1.35">Cmax and AUC₀₋ₜ from each subject’s prediction</p></div>
+<x-shape kind="arrow-right" style="background:#8A94A6;width:48px;height:24px"></x-shape>
+<div style="width:270px;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:24px;border:1px solid #DCE1E8;border-radius:12px"><h3 style="font-size:28px;font-weight:600;color:#14213D">Same BE code</h3><p style="font-size:24px;line-height:1.35">safe space, Type I, cross-checks</p></div>
+</div>
+<div style="display:flex;gap:48px">
+<p style="flex:1;font-size:28px;line-height:1.4"><b>As for metformin:</b> rich sampling, each formulation fitted on its own, and the same be_utils code on both sides.</p>
+<p style="flex:1;font-size:28px;line-height:1.4"><b>Different:</b> felodipine needs a gut absorption step and a two-component release. Metformin's 1-compartment structure agreed only near the reference here.</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">Pumas 2.8.1 · felodipine_poppk_pumas/ → Felodipine-BCSII/poppk/ · equations in model_equations/felodipine_poppk_models.pdf</p>
+<aside>M5 has 14 estimated parameters: two Weibull components with their own T50 and shape and a mixing fraction, ka, CL, Vc, Q, Vp, IIV on release time, CL and Vc, and a proportional error. Release enters through Pumas @delay, the Pumas built-in delay form, with the 0.31 h lag fixed inside the delay distribution. Each arm was fitted from one start (absorption-limited), which was never worse than the alternative on the 7 arms fitted from both; about 30 minutes per arm. The 1-compartment baseline of 16 October is kept in the model-testing log.</aside>
+</section>

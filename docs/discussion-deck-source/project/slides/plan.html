@@ -1,0 +1,16 @@
+<section id="plan" data-transition="fade" style="background:#ECEEF1;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Plan · no new PK-Sim runs needed</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:56px;font-weight:600;line-height:1.15;color:#14213D">What is left, in proposed order</h2>
+<table style="font-size:26px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#DDE2EA"><th style="width:36%">Step</th><th style="width:48%">Why</th><th style="width:16%;text-align:right">Effort</th></tr>
+<tr style="background:#FFFFFF"><td>1. Shape-edge check</td><td>Shape-1.5 GMR shortfall: structural, 2 to 3% low on three noise seeds</td><td style="text-align:right">done</td></tr>
+<tr style="background:#FFFFFF"><td>2. NCA on the sampled data</td><td>Model-free comparator: is it the model or the sampling?</td><td style="text-align:right">0.5 d</td></tr>
+<tr style="background:#FFFFFF"><td>3. Sparse sampling (6 samples)</td><td>Same test as the metformin sparse-sampling run, now with M5</td><td style="text-align:right">1 d</td></tr>
+<tr style="background:#FFFFFF"><td>4. Write-up</td><td>Felodipine write-up; methods and figures</td><td style="text-align:right">2–3 d</td></tr>
+<tr style="background:#FFFFFF"><td>5. Small literature items</td><td>Colon / SI CYP3A4 ratio citation; Blychert 1990 tablets</td><td style="text-align:right">0.5 d</td></tr>
+<tr style="background:#FFFFFF"><td>6. Joint PopPK (optional)</td><td>T50 and shape as covariates; pairing two arms (M4) failed</td><td style="text-align:right">1 d+</td></tr>
+</table>
+<p style="font-size:28px;line-height:1.4"><b>Done since 16 Oct:</b> richer absorption model (12 structures, M5 final, M3 fallback) and the full BE comparison rerun on all 27 arms.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">Steps 2–3 reuse the existing PK-Sim outputs and pipeline · M5 fits take about 30 min per arm</p>
+<aside>The richer absorption model answered the question the 16 October result raised: the PBPK versus PopPK divergence was a property of the one-compartment model, not of PopPK as a method. The shape-edge check refitted M5 on the reference, shape 1.2 and shape 1.5 arms with two other residual-noise seeds: the shape-1.5 Cmax GMR came out 1.227, 1.242 and 1.240 against PBPK 1.269, so the shortfall is structural, not noise. Sparse sampling is the next real test: with 6 samples per subject the two release components may no longer be identifiable, in which case M3 is the fallback.</aside>
+</section>

@@ -1,0 +1,16 @@
+<section id="metformin" data-transition="fade" style="background:#ECEEF1;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Two drugs side by side</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:56px;font-weight:600;line-height:1.15;color:#14213D">With the right structure, felodipine agrees as well as metformin</h2>
+<table style="font-size:26px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#DDE2EA"><th style="width:34%">Rich sampling, per-arm PopPK</th><th style="width:33%">Metformin XR</th><th style="width:33%">Felodipine ER (M5)</th></tr>
+<tr style="background:#FFFFFF"><td>Structure needed</td><td>Weibull → 1 compartment</td><td>Dual Weibull → ka → 2 compartments</td></tr>
+<tr style="background:#FFFFFF"><td>Fitted release vs CQA</td><td>Followed T50</td><td>Descriptive; T50 offset about 2×</td></tr>
+<tr style="background:#FFFFFF"><td>80% power edges</td><td>Within 0.05–0.15 h</td><td>Within 0.03 h (T50), 0.04 (shape)</td></tr>
+<tr style="background:#FFFFFF"><td>GMR boundary error</td><td>−1% slow, −7% fast</td><td>−1.4% slow, +0.7% fast</td></tr>
+<tr style="background:#FFFFFF"><td>Truth passes at PopPK’s slow edge</td><td>8–10%</td><td>6.0%</td></tr>
+<tr style="background:#FFFFFF"><td>Verdict</td><td>Same decisions</td><td>Same decisions except shape 1.465–1.5</td></tr>
+</table>
+<p style="font-size:28px;line-height:1.4">The message becomes: agreement on the decision needs a structurally adequate PopPK model; with one, felodipine agrees as closely as metformin.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">Metformin: metformin_poppk_weibull_export_edited/output (rich, per-arm) · n = 48/86 metformin, n = 54 felodipine</p>
+<aside>Metformin numbers are the stored rich per-arm results: boundaries within minus 1.1 and minus 6.8 percent, and the PBPK truth passing 8 to 10 percent of trials at the PopPK slow-side boundary. On 16 October, with the 1-compartment model, felodipine was minus 7 and minus 15 percent with 16 percent at the slow edge. The M5 release parameters do not map onto the PK-Sim T50: the PopPK input lumps release, gut transit and absorption, so its 50 percent release time is about 8 to 9 hours where PK-Sim uses 4 to 5. The endpoints are right; the parameters are not physiological.</aside>
+</section>

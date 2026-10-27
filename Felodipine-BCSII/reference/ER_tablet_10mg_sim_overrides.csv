@@ -1,0 +1,28 @@
+path,value,unit
+Events|PO SD 10mg|Felodipine_ER tablet|Application_1|ProtocolSchemaItem|Volume of water/body weight,3.5,ml/kg
+Events|PO SD 10mg|Felodipine_ER tablet|Application_1|Tablet time delay factor,0.0695415108,
+Neighborhoods|Caecum_int_Caecum_cell|Felodipine|P (interstitial->intracellular),0.0891674187,cm/min
+Neighborhoods|Caecum_int_Caecum_cell|Felodipine|P (intracellular->interstitial),0.0891674187,cm/min
+Neighborhoods|ColonAscendens_int_ColonAscendens_cell|Felodipine|P (interstitial->intracellular),0.0891674187,cm/min
+Neighborhoods|ColonAscendens_int_ColonAscendens_cell|Felodipine|P (intracellular->interstitial),0.0891674187,cm/min
+Neighborhoods|ColonDescendens_int_ColonDescendens_cell|Felodipine|P (interstitial->intracellular),0.0891674187,cm/min
+Neighborhoods|ColonDescendens_int_ColonDescendens_cell|Felodipine|P (intracellular->interstitial),0.0891674187,cm/min
+Neighborhoods|ColonSigmoid_int_ColonSigmoid_cell|Felodipine|P (interstitial->intracellular),0.0891674187,cm/min
+Neighborhoods|ColonSigmoid_int_ColonSigmoid_cell|Felodipine|P (intracellular->interstitial),0.0891674187,cm/min
+Neighborhoods|ColonTransversum_int_ColonTransversum_cell|Felodipine|P (interstitial->intracellular),0.0891674187,cm/min
+Neighborhoods|ColonTransversum_int_ColonTransversum_cell|Felodipine|P (intracellular->interstitial),0.0891674187,cm/min
+Neighborhoods|Duodenum_int_Duodenum_cell|Felodipine|P (interstitial->intracellular),0.0891674187,cm/min
+Neighborhoods|Duodenum_int_Duodenum_cell|Felodipine|P (intracellular->interstitial),0.0891674187,cm/min
+Neighborhoods|LowerIleum_int_LowerIleum_cell|Felodipine|P (interstitial->intracellular),0.0891674187,cm/min
+Neighborhoods|LowerIleum_int_LowerIleum_cell|Felodipine|P (intracellular->interstitial),0.0891674187,cm/min
+Neighborhoods|LowerJejunum_int_LowerJejunum_cell|Felodipine|P (interstitial->intracellular),0.0891674187,cm/min
+Neighborhoods|LowerJejunum_int_LowerJejunum_cell|Felodipine|P (intracellular->interstitial),0.0891674187,cm/min
+Neighborhoods|Rectum_int_Rectum_cell|Felodipine|P (interstitial->intracellular),0.0891674187,cm/min
+Neighborhoods|Rectum_int_Rectum_cell|Felodipine|P (intracellular->interstitial),0.0891674187,cm/min
+Neighborhoods|UpperIleum_int_UpperIleum_cell|Felodipine|P (interstitial->intracellular),0.0891674187,cm/min
+Neighborhoods|UpperIleum_int_UpperIleum_cell|Felodipine|P (intracellular->interstitial),0.0891674187,cm/min
+Neighborhoods|UpperJejunum_int_UpperJejunum_cell|Felodipine|P (interstitial->intracellular),0.0891674187,cm/min
+Neighborhoods|UpperJejunum_int_UpperJejunum_cell|Felodipine|P (intracellular->interstitial),0.0891674187,cm/min
+Undefined Liver|Reference concentration,1.0,µmol/l
+Undefined Liver|t1/2 (intestine),1380.0,min
+Undefined Liver|t1/2 (liver),2160.0,min

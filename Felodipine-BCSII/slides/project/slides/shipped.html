@@ -1,0 +1,24 @@
+<section id="shipped" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Starting point</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#14213D">The shipped ER model gets AUC right and underpredicts Cmax by about 22%</h2>
+<div style="display:flex;gap:64px;align-items:start">
+<table style="flex:1;font-size:28px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#E6EAF0"><th style="width:40%">Formulation</th><th style="width:20%;text-align:right">T50</th><th style="width:20%;text-align:right">Lag</th><th style="width:20%;text-align:right">Shape</th></tr>
+<tr><td>ER tablet (Weibull)</td><td style="text-align:right">286.95 min</td><td style="text-align:right">18.68 min</td><td style="text-align:right">0.764</td></tr>
+<tr><td>IR tablet (Weibull)</td><td style="text-align:right">46.50 min</td><td style="text-align:right">0</td><td style="text-align:right">0.888</td></tr>
+<tr><td>Oral solution</td><td style="text-align:right">dissolved</td><td style="text-align:right">–</td><td style="text-align:right">–</td></tr>
+</table>
+<div style="width:560px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:4px;background:#FFFFFF;padding:32px;border:1px solid #DCE1E8;border-left:8px solid #C8641E;border-radius:12px">
+<p style="font-size:24px;color:#6B7585">Cmax pred/obs, 4 ER 10 mg studies</p>
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;color:#14213D">0.78 <span style="color:#C8641E">fails</span></p>
+</div>
+<div style="display:flex;flex-direction:column;gap:4px;background:#FFFFFF;padding:32px;border:1px solid #DCE1E8;border-left:8px solid #2F6FB0;border-radius:12px">
+<p style="font-size:24px;color:#6B7585">AUC0–tlast pred/obs</p>
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;color:#14213D">1.03 <span style="color:#2F6FB0">passes</span></p>
+</div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">Studies: Edgar 1987, Bailey 1996, Bailey 2003, Gelal 2005 · geometric means · project notes §1, §2.2</p>
+<aside>OSP Felodipine-Model snapshot, loaded in PK-Sim 12.2 with no errors. Both tablets are fitted Weibulls; there is no particle formulation. Against the four ER 10 mg fasted studies attached to the "ER tablet 10mg" simulation, AUC passes our 1.25-fold criterion but Cmax is about 22% low. Per study, Cmax ranged from 0.63 (Bailey 1996) to 1.05 (Gelal 2005).</aside>
+</section>

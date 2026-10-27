@@ -1,0 +1,19 @@
+<section id="type1cross" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">PBPK vs PopPK · Type I error</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:56px;font-weight:600;line-height:1.15;color:#14213D">PopPK now places the GMR boundaries where PBPK does</h2>
+<table style="font-size:26px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#E6EAF0"><th style="width:22%">Boundary</th><th style="width:16%;text-align:right">PBPK</th><th style="width:22%;text-align:right">PopPK M5</th><th style="width:20%;text-align:right">True GMR there</th><th style="width:20%;text-align:right">Truth passes there</th></tr>
+<tr><td>T50, fast (1.25)</td><td style="text-align:right">3.25 h</td><td style="text-align:right">3.27 h (+0.7%)</td><td style="text-align:right">1.245</td><td style="text-align:right">5.6%</td></tr>
+<tr style="background:#FFFFFF"><td>T50, slow (0.80)</td><td style="text-align:right">6.96 h</td><td style="text-align:right">6.86 h (−1.4%)</td><td style="text-align:right">0.807</td><td style="text-align:right">6.0%</td></tr>
+<tr><td>Shape, high (1.25)</td><td style="text-align:right">1.46</td><td style="text-align:right">not reached</td><td style="text-align:right">—</td><td style="text-align:right">—</td></tr>
+</table>
+<div style="display:flex;gap:48px;align-items:start">
+<img src="/_blob/181247b42c025a230137ffd69ca49269" alt="Bar chart of the PBPK truth's joint BE pass rate at its own boundary and at the PopPK M5 boundary, T50 axis, n 24 and 54" style="width:700px;height:305px;object-fit:contain;background:#FFFFFF;border:1px solid #DCE1E8">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:28px;line-height:1.4"><b>Fast side:</b> the baseline's inflation is gone (it put the edge where the true GMR was 1.37).</p>
+<p style="font-size:28px;line-height:1.4"><b>Shape side:</b> PopPK still calls shapes 1.465–1.5 bioequivalent.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">felo_04 · output_rich_m5/compare/type1.csv · joint ABE, n = 54 (n = 24: 4.0% and 4.4%) · 20 000 trials per cell</p>
+<aside>Each method is calibrated at its own boundary: 3.7 to 5.1 percent. With M5 the PBPK truth passes 5.6 percent of trials at PopPK's fast edge and 6.0 percent at the slow edge with n = 54, a small excess over the nominal 5 percent; for Cmax alone it is 5.8 and 6.3 percent. The fallback M3 gave 10.1 percent on the fast side. On the shape axis neither M5 nor M3 reaches a GMR of 1.25 within the tested range, because both under-predict the shape-1.5 Cmax GMR by 2 to 3 percent, which held on three residual-noise seeds.</aside>
+</section>

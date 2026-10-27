@@ -1,0 +1,305 @@
+<title>Felodipine PopPK Model Testing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,650&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single reading column (~72ch) with wide tables allowed to scroll in their own frame; status chips mark final / fallback / rejected. */
+:root {
+  --bg: #f6f8f8;
+  --surface: #ffffff;
+  --fg: #1b2528;
+  --muted: #5a686c;
+  --rule: #d5dee0;
+  --accent: #1f6f78;
+  --accent-soft: #e2f0f1;
+  --good: #2c7a4b;
+  --good-soft: #e3f3e8;
+  --warn: #8a5a00;
+  --warn-soft: #fbf0d9;
+  --bad: #9b3434;
+  --bad-soft: #f7e4e4;
+  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111719; --surface: #182124; --fg: #e3eaec; --muted: #9aaaae; --rule: #2c393d;
+    --accent: #6cc3cc; --accent-soft: #1b3438;
+    --good: #7fd29d; --good-soft: #1b3324; --warn: #e6b65a; --warn-soft: #3a2f17; --bad: #ee9a9a; --bad-soft: #3b2020;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111719; --surface: #182124; --fg: #e3eaec; --muted: #9aaaae; --rule: #2c393d;
+  --accent: #6cc3cc; --accent-soft: #1b3438;
+  --good: #7fd29d; --good-soft: #1b3324; --warn: #e6b65a; --warn-soft: #3a2f17; --bad: #ee9a9a; --bad-soft: #3b2020;
+  color-scheme: dark;
+}
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 15.5px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 72px;
+}
+.page { max-width: 980px; margin: 0 auto; display: grid; gap: 44px; }
+.prose { max-width: 72ch; }
+header { display: grid; gap: 12px; border-bottom: 1px solid var(--rule); padding-bottom: 28px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 650; text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(30px, 5vw, 42px); }
+h2 { font-size: 25px; }
+h3 { font-size: 18px; font-weight: 500; }
+p { margin: 0; }
+.lede { font-size: 17.5px; color: var(--muted); max-width: 68ch; }
+section { display: grid; gap: 16px; min-width: 0; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 13.5px; color: var(--muted); }
+.meta b { color: var(--fg); font-weight: 600; }
+.decision {
+  display: grid; gap: 10px; padding: 20px 22px; background: var(--accent-soft);
+  border-radius: 6px; max-width: 72ch;
+}
+.decision p { font-size: 16px; }
+ol, ul { margin: 0; padding-left: 1.3em; display: grid; gap: 8px; }
+code, .mono { font-family: var(--font-mono); font-size: .88em; }
+code { background: var(--accent-soft); padding: 1px 5px; border-radius: 3px; overflow-wrap: anywhere; }
+.tbl { overflow-x: auto; border: 1px solid var(--rule); border-radius: 6px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--rule); }
+th { font-weight: 600; font-size: 12px; letter-spacing: .03em; color: var(--muted); background: var(--bg); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td.num { font-family: var(--font-mono); font-size: 12.5px; white-space: nowrap; }
+tr.final td { background: var(--good-soft); }
+tr.final td:first-child { font-weight: 600; }
+.wide table { min-width: 940px; }
+.chip { display: inline-block; font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.chip.final { background: var(--good); color: var(--surface); }
+.chip.fallback { background: var(--accent); color: var(--surface); }
+.chip.ok { background: var(--good-soft); color: var(--good); }
+.chip.partial { background: var(--warn-soft); color: var(--warn); }
+.chip.no { background: var(--bad-soft); color: var(--bad); }
+.note { font-size: 13.5px; color: var(--muted); max-width: 80ch; }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.cols > * { min-width: 0; }
+.round { display: grid; gap: 14px; }
+.round .when { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); }
+dl { margin: 0; display: grid; gap: 14px; max-width: 76ch; }
+dt { font-weight: 600; }
+dd { margin: 4px 0 0; }
+.good { color: var(--good); font-weight: 600; }
+.bad { color: var(--bad); font-weight: 600; }
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 20px; }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+
+<div class="page">
+
+<header>
+  <div class="eyebrow">Felodipine ER · PopPK vs PBPK · model-informed BE</div>
+  <h1>Felodipine ER PopPK: model testing log</h1>
+  <p class="lede">What was tried, what happened, and why the dual-Weibull model (M5) became the final PopPK model, with the absorption model M3 kept as the fallback.</p>
+  <div class="meta"><span><b>Updated</b> 25 Oct 2026</span><span><b>Models tested</b> 12 variants, 4 rounds of analysis</span><span><b>Arms</b> 27 release formulations (T50 × Weibull shape)</span></div>
+</header>
+
+<section>
+  <h2>Summary</h2>
+  <div class="prose"><p>The PopPK model has to reproduce the bioequivalence decision that the PBPK (PK-Sim) model gives across 27 release formulations, defined by the Weibull dissolution T50 and shape. Twelve structural variants were tested in three rounds.</p></div>
+  <ol class="prose">
+    <li><b>Disposition and absorption structure</b> (M1 to M4, 16–23 Oct). A gut absorption step between release and plasma (M3) cut the T/R Cmax GMR error from up to 20 % (M1) to at most 3.5 %.</li>
+    <li><b>Delay-style <code>@delay</code> input</b> (M1d–M3d and no-lag variants, 24 Oct). With the release lag kept, <code>@delay</code> reproduces the ODE models exactly. Without the lag, fits and curves are much worse.</li>
+    <li><b>Fixing M3's early peak</b> (M3L, M3Lo, M5, M6, 24–25 Oct). A dual-Weibull release (M5) fits better on every arm and halves the Tmax bias. Estimating the lag or adding a transit chain does not help.</li>
+  </ol>
+  <div class="decision">
+    <p><span class="chip final">Final</span>&nbsp; <b>M5</b>: two Weibull release components in the <code>@delay</code> form, fixed 0.3113 h lag, first-order absorption, 2-compartment disposition, fitted per arm.</p>
+    <p><span class="chip fallback">Fallback</span>&nbsp; <b>M3</b>: one Weibull release, first-order absorption, 2-compartment disposition.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Common set-up</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Item</th><th>Setting</th></tr></thead>
+    <tbody>
+      <tr><td>Data</td><td>27 PK-Sim arms × 100 subjects, 18 samples from 0.5 to 96 h, 15 % proportional noise (seed 20261016). Every model is fitted to the same noisy dataset.</td></tr>
+      <tr><td>Dose and units</td><td>10 mg = 26 024 nmol; h, L, L/h, nmol/L</td></tr>
+      <tr><td>Release lag</td><td>0.3113 h, fixed at the PK-Sim value unless stated</td></tr>
+      <tr><td>Variability</td><td>Log-normal IIV on release time, CL and Vc; proportional residual error</td></tr>
+      <tr><td>Estimation</td><td>FOCE in Pumas, one fit per arm; two starting points, the higher log-likelihood kept</td></tr>
+      <tr><td>Diagnostic arms</td><td class="mono">4.78 h / 0.764 (reference), 4.78 / 0.5, 4.78 / 1.5, 2.39 / 0.764, 9.56 / 0.764</td></tr>
+      <tr><td>Benchmarks</td><td>Cmax and AUC against PBPK in the same subjects; T/R Cmax GMR against the reference arm; Tmax and mean curve against noise-free PK-Sim; BE limits and Type I error</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>All models at a glance</h2>
+  <p class="note">Diagnostic arms, best start per arm. LL is the log-likelihood (higher is better). GMR error is the model's T/R Cmax GMR relative to PBPK's. Tmax bias is the median per-subject Tmax minus PK-Sim's. Mean-curve error is the average absolute error of the mean profile from 0.5 to 12 h.</p>
+  <div class="tbl wide"><table>
+    <thead><tr><th>Model</th><th>Structure</th><th>Params</th><th>Best LL by arm<br>(ref, 0.5, 1.5, 2.39, 9.56)</th><th>GMR error</th><th>Tmax bias</th><th>Curve error</th><th>Outcome</th></tr></thead>
+    <tbody>
+      <tr><td>M1</td><td>Weibull → 1-cmt</td><td class="num">8</td><td class="num">−557, −786, −366, −719, −395</td><td class="num">−20 to −9 %</td><td class="num">−1.5 to +0.35 h</td><td class="num">3.8–12.9 %</td><td><span class="chip no">Rejected</span></td></tr>
+      <tr><td>M2</td><td>Weibull → 2-cmt</td><td class="num">10</td><td class="num">−557, −593, −247, −603, −388</td><td class="num">−11 to −6 %</td><td class="num">−1.2 to +0.3 h</td><td class="num">1.9–10.9 %</td><td><span class="chip no">Not identified</span></td></tr>
+      <tr><td>M3</td><td>Weibull → ka → 2-cmt</td><td class="num">11</td><td class="num">−354, −487, −59, −481, −108</td><td class="num">−3.5 to +3.1 %</td><td class="num">−0.7 to +0.1 h</td><td class="num">2.0–6.6 %</td><td><span class="chip fallback">Fallback</span></td></tr>
+      <tr><td>M4</td><td>M3 with reference and test paired</td><td class="num">13</td><td>Not comparable (two arms per fit)</td><td class="num">−12 to +15 %</td><td>–</td><td>–</td><td><span class="chip no">Rejected</span></td></tr>
+      <tr><td>M1d, M2d</td><td>M1, M2 in <code>@delay</code> form</td><td class="num">8, 10</td><td>As M1, M2 (within 0.3)</td><td>As M1, M2</td><td>As M1, M2</td><td>As M1, M2</td><td><span class="chip ok">Equivalent</span></td></tr>
+      <tr><td>M3d</td><td>M3 in <code>@delay</code> form</td><td class="num">11</td><td class="num">−354, −488, −56, −481, −107</td><td>As M3</td><td>As M3</td><td>As M3</td><td><span class="chip ok">Equivalent</span></td></tr>
+      <tr><td>M1d0, M2d0, M3d0</td><td><code>@delay</code>, no lag</td><td class="num">8, 10, 11</td><td class="num">M3d0: −755, −754, −48, −866, −500</td><td class="num">M3d0: −10.4 to 0 %</td><td class="num">M3d0: −0.4 to +0.55 h</td><td class="num">M3d0: 2.9–8.4 %</td><td><span class="chip no">Lag needed</span></td></tr>
+      <tr><td>M3L</td><td>M3d, lag estimated</td><td class="num">12</td><td>Infinite likelihood on 4 arms; −224 at shape 1.5</td><td>–</td><td>–</td><td>–</td><td><span class="chip no">Not estimable</span></td></tr>
+      <tr><td>M3Lo</td><td>M3 ODE, lag estimated</td><td class="num">12</td><td class="num">−526, −762, −329, −808, −106</td><td>–</td><td>–</td><td>–</td><td><span class="chip no">Worse fits</span></td></tr>
+      <tr class="final"><td>M5</td><td>Dual Weibull → ka → 2-cmt</td><td class="num">14</td><td class="num">−348, −439, +38, −433, −85</td><td class="num">−3.3 to 0 %</td><td class="num">−0.3 to +0.15 h</td><td class="num">1.2–4.6 %</td><td><span class="chip final">Final</span></td></tr>
+      <tr><td>M6</td><td>Weibull → 3 transit → 2-cmt</td><td class="num">11</td><td class="num">−365, −479, +19, −484, −109</td><td class="num">−3.1 to +3.2 %</td><td class="num">−0.45 to 0 h</td><td class="num">2.1–4.3 %</td><td><span class="chip partial">Partial fix</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="round">
+  <div class="when">Round 1 · 16–23 Oct 2026</div>
+  <h2>Disposition and absorption structure</h2>
+  <dl>
+    <div><dt>M1: 1-compartment with Weibull release</dt><dd>The first production model, fitted on all 27 arms. It had two likelihood basins. In 23 of 27 arms the best fit was a fast "release" (implied T50 0.3–2.4 h) with a very large Vc of about 4000 L, so release and distribution were not separated. Cmax/PBPK ranged 0.87–1.135 across arms, which biased the T/R Cmax GMR by up to 20 %, and the PopPK safe space drifted away from PBPK off the reference shape.</dd></div>
+    <div><dt>M2: 2-compartment with Weibull release</dt><dd>Q or Vp ran to their bounds from either start. The peripheral compartment is not identified without an absorption step. Rejected.</dd></div>
+    <div><dt>M3: Weibull release, first-order absorption, 2-compartment</dt><dd>The gut compartment separates release from appearance in plasma, which gives PBPK's fast rise and plateau without forcing release to be fast. On all 27 arms its AIC beat M1 on 27/27, Cmax/PBPK was 0.976–1.043 and the GMR error at most 3.5 %. Remaining problems: the fitted T50 is about twice PK-Sim's (about 9.4 h at the reference 4.78 h), Vc reaches about 2500 L at shape 1.5, and the curve peaks 0.4–0.7 h early at shape 0.764 and above.</dd></div>
+    <div><dt>M4: M3 paired, reference and test in the same subjects</dt><dd>Fitted to two arms at once with shared disposition and separate release per period. It was much worse than two separate M3 fits: several fits produced non-finite predictions for up to 75 of 100 subjects, and the GMR error was −12 % to +15 %. In the PBPK model the release rate changes where along the gut the drug is absorbed, and so how much gut-wall CYP3A4 extraction it sees. Disposition as seen from the gut is therefore not shared across formulations. Rejected.</dd></div>
+  </dl>
+</section>
+
+<section class="round">
+  <div class="when">Round 2 · 24 Oct 2026</div>
+  <h2>Delay-style <code>@delay</code> input</h2>
+  <div class="prose"><p><b>Question.</b> Do the results stay the same if the hand-written Weibull hazard ODE is replaced by the Pumas built-in delay form, <code>@delay(Weibull(shape, scale), cmt)</code> with the dose at bioavailability 0?</p></div>
+  <ul class="prose">
+    <li>The first version had no lag, as in the plain @delay form. Fits were much worse (M3d0 reference LL −755 against −354), M1 and M2 peaked too early, and M3d0 overshot by 60 % at 0.5 h.</li>
+    <li>Pumas ignores <code>@dosecontrol</code> lags when <code>@delay</code> is used: the output is identical with and without them.</li>
+    <li><code>Tlag + Weibull</code> gives an infinite likelihood for shape below 1, and so does a dose record placed at t = lag.</li>
+    <li>The working form is <code>@delay(Tlag + truncated(Weibull(γ, α), 1e-4, Inf), cmt)</code>. The truncation removes at most 0.4 % of the release (at shape 0.5), less than the 0.01 h clock floor M3 already used.</li>
+    <li><span class="good">With the lag, M1d, M2d and M3d reproduce M1, M2 and M3</span>: log-likelihoods within 3 units, identical Tmax and mean curves, the same GMRs, and similar run times.</li>
+  </ul>
+  <div class="prose"><p><b>Conclusion.</b> The <code>@delay</code> form is equivalent and was adopted for the new structures. The lag must stay.</p></div>
+</section>
+
+<section class="round">
+  <div class="when">Round 3 · 24–25 Oct 2026</div>
+  <h2>Fixing M3's early peak</h2>
+  <div class="prose"><p>M3 rises correctly but peaks early and falls too fast, worst at shape 1.5 (Tmax 5.3 h against 6.0 h, with only 28 % of subjects within 0.5 h of PK-Sim). Two physiological explanations were checked first.</p></div>
+  <ul class="prose">
+    <li><b>Regional gut-wall extraction varying with release rate:</b> rejected. AUC per fraction absorbed is flat within ±3 % across the 27 arms.</li>
+    <li><b>Deconvolution against PK-Sim's "absorbed into mucosa" output:</b> inconclusive, with implied half-lives of 2 h or less.</li>
+  </ul>
+  <div class="prose"><p>That leaves a structural cause: one release timescale and one ka cannot give both the fast initial phase and the long late tail. Four variants were tested on the diagnostic arms.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Variant</th><th>Idea</th><th>What happened</th></tr></thead>
+    <tbody>
+      <tr><td>M3L</td><td>Estimate the lag in the <code>@delay</code> form</td><td>Infinite likelihood at the start on all 4 arms with shape below 1. At shape 1.5, LL −224 against −56 with the lag fixed.</td></tr>
+      <tr><td>M3Lo</td><td>Estimate the lag in the ODE form</td><td>The lag lands at 0.27–0.33 h on most fits, close to the fixed 0.3113 h. LL was worse than with the lag fixed on 4 of 5 arms, and the second start ended far worse (LL −840 to −5650) on every arm.</td></tr>
+      <tr class="final"><td>M5</td><td>Two Weibull release components (FF mixture)</td><td>Best LL on all 5 arms (+7 to +97 over M3); Tmax bias −0.3 to +0.15 h; mean-curve error 1.2–4.6 %.</td></tr>
+      <tr><td>M6</td><td>3 transit compartments instead of ka</td><td>Fixes the shape-1.5 curve (LL +19) but is no better than M3 elsewhere; 2 of 10 fits failed.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="prose"><p><b>Decision (24 Oct):</b> M5 final, M3 fallback.</p></div>
+</section>
+
+<section>
+  <div class="when mono" style="font-size:12.5px;color:var(--muted)">24–25 Oct 2026</div>
+  <h2>M5 on all 27 arms</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Measure</th><th>M3 (fallback)</th><th>M5 (final)</th></tr></thead>
+    <tbody>
+      <tr><td>Better AIC</td><td class="num">0 / 27 arms</td><td class="num"><span class="good">27 / 27</span> (median ΔAIC −48, range −289 to −6.5)</td></tr>
+      <tr><td>Cmax ratio, PopPK / PBPK</td><td class="num">0.976–1.043</td><td class="num">0.976–1.019</td></tr>
+      <tr><td>AUC<sub>0–t</sub> ratio, PopPK / PBPK</td><td class="num">0.985–1.012</td><td class="num">0.989–1.004</td></tr>
+      <tr><td>Cmax T/R GMR error vs PBPK</td><td class="num">max 3.5 %, mean 1.6 %</td><td class="num">max 3.3 %, mean 1.3 %</td></tr>
+      <tr><td>Tmax bias (median of arms)</td><td class="num">0.45 h</td><td class="num">0.20 h</td></tr>
+      <tr><td>Subjects with Tmax within 0.5 h</td><td class="num">64 %</td><td class="num">76 %</td></tr>
+      <tr><td>2-D safe-space T50 limits vs PBPK</td><td class="num">mean |Δ| 0.08 h, bias +0.03 h</td><td class="num">mean |Δ| 0.09 h, bias −0.09 h</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Caveats</h3>
+  <ul class="prose">
+    <li>The two release components describe the curve; they are not two physical processes. The fast fraction ranges 0.02–0.97 across arms, and on some arms the first component is a 0.2–0.4 h burst.</li>
+    <li>The mixture's 50 % release time is about 8–9 h where PK-Sim uses 4–5 h, the same offset as M3, because the PopPK input lumps release, gut transit and absorption.</li>
+    <li>At the reference arm, the fast fraction (RSE 45 %) and Q and Vp (RSE 55–70 %) are poorly determined. Vc reaches about 2300 L at shape 1.5, as in M3.</li>
+    <li>One arm, 6.31 h / 1.2, still peaks 0.85 h early.</li>
+    <li>The 2-D safe-space limits sit slightly low because M5 overpredicts the reference-arm Cmax by 0.9 %, so its T/R GMRs run about 1.5 % low at shape 0.9 and above.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="when mono" style="font-size:12.5px;color:var(--muted)">25 Oct 2026</div>
+  <h2>BE decision vs PBPK</h2>
+  <div class="cols">
+    <div style="display:grid;gap:10px;min-width:0">
+      <h3>T50 axis (shape 0.764): where BE is lost</h3>
+      <div class="tbl"><table>
+        <thead><tr><th></th><th>Lower limit</th><th>Upper limit</th></tr></thead>
+        <tbody>
+          <tr><td>PBPK</td><td class="num">3.25 h</td><td class="num">6.96 h</td></tr>
+          <tr><td>M3</td><td class="num">3.40 h (+0.14)</td><td class="num">6.83 h (−0.13)</td></tr>
+          <tr class="final"><td>M5</td><td class="num">3.27 h (+0.02)</td><td class="num">6.86 h (−0.10)</td></tr>
+        </tbody>
+      </table></div>
+      <p class="note">Cmax sets every limit; AUC never reaches the BE bounds.</p>
+    </div>
+    <div style="display:grid;gap:10px;min-width:0">
+      <h3>Type I error at the declared limit</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Limit, endpoint</th><th>M3, n = 24 / 54</th><th>M5, n = 24 / 54</th></tr></thead>
+        <tbody>
+          <tr><td>Lower, Cmax</td><td class="num"><span class="bad">7.6 % / 10.2 %</span></td><td class="num">5.3 % / 5.8 %</td></tr>
+          <tr><td>Upper, Cmax</td><td class="num">5.8 % / 6.8 %</td><td class="num">5.6 % / 6.3 %</td></tr>
+          <tr><td>Lower, joint</td><td class="num">5.8 % / <span class="bad">10.1 %</span></td><td class="num">4.0 % / 5.6 %</td></tr>
+          <tr><td>Upper, joint</td><td class="num">4.6 % / 6.6 %</td><td class="num">4.4 % / 6.0 %</td></tr>
+        </tbody>
+      </table></div>
+      <p class="note">Chance of passing BE when the true (PBPK) product sits at the limit the PopPK model would declare. Nominal 5 %; 20 000 simulated trials, seed 1234.</p>
+    </div>
+  </div>
+  <div class="prose"><p><b>Shape axis (T50 4.78 h).</b> PBPK loses BE at shape 1.465. Both PopPK models underpredict the shape-1.5 Cmax GMR (M3 1.235, M5 1.227, PBPK 1.269), so neither reaches 1.25 within the tested range and both would call shapes 1.465–1.5 bioequivalent. Unchanged from M3: the TOST control (reference × 0.80) gives 4.7–5.1 %, and RSABE and ABEL accept 20–22 % and 13–14 % at the ABE limit (n = 24).</p></div>
+  <div class="prose"><p><b>Noise check (25 Oct).</b> To see whether the shape-1.5 shortfall is noise, M5 was refitted on the reference, shape 1.2 and shape 1.5 arms (T50 4.78 h) with two new residual-noise datasets (seeds 101 and 202).</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Cmax GMR vs reference (n = 100)</th><th>Shape 1.2</th><th>Shape 1.5</th></tr></thead>
+    <tbody>
+      <tr><td>PBPK</td><td class="num">1.119</td><td class="num">1.269</td></tr>
+      <tr><td>M5, seed 20261016 (original)</td><td class="num">1.101</td><td class="num">1.227</td></tr>
+      <tr><td>M5, seed 101</td><td class="num">1.136</td><td class="num">1.242</td></tr>
+      <tr><td>M5, seed 202</td><td class="num">1.112</td><td class="num">1.240</td></tr>
+    </tbody>
+  </table></div>
+  <div class="prose"><p>At shape 1.2 the seeds land on both sides of PBPK, so that gap is noise (about ±1.5 %). At shape 1.5 M5 is 2–3 % low and below 1.25 on every seed: <b>the shortfall is structural</b>. The fitted fast fraction at the reference arm varied from 0.02 to 0.15 between seeds, so the two release components describe the curve rather than being identified individually.</p></div>
+</section>
+
+<section>
+  <h2>Run notes</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Date</th><th>What happened</th></tr></thead>
+    <tbody>
+      <tr><td class="num">23 Oct</td><td>A queued run never started because its waiter matched its own command line; about 7.5 h lost. Waiters now watch the process ID or a finish file.</td></tr>
+      <tr><td class="num">24 Oct</td><td>A finished M4 run looked hung: its wrapper process was a zombie, which still reports as alive.</td></tr>
+      <tr><td class="num">24 Oct</td><td>M2d0 at the reference arm (disposition start) hung for more than 40 min and was stopped; it is recorded as skipped.</td></tr>
+      <tr><td class="num">24 Oct</td><td>The Pumas <code>@delay</code> lag limitations in Round 2 were found.</td></tr>
+      <tr><td class="num">24–25 Oct</td><td>M5 27-arm run: two scripting bugs fixed in the first hour (arm ordering, and loading saved fits). With two starts each arm took about 58 min, so the run switched to the absorption-limited start only, which was never worse on the 7 arms fitted from both. All 27 arms fitted in about 11 h.</td></tr>
+      <tr><td class="num">25 Oct</td><td>Noise check: 6 of 6 refits (seeds 101 and 202, 3 arms each) converged in 10–29 min each, finishing at 16:14 IST.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Where the results are</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>What</th><th>Location (under <code>Felodipine-BCSII/poppk/</code>)</th></tr></thead>
+    <tbody>
+      <tr><td>Equations and Pumas code, M1–M6</td><td><code>model_comparison/model_equations/felodipine_poppk_models.pdf</code></td></tr>
+      <tr><td>Short model notes</td><td><code>model_comparison/MODELS.md</code></td></tr>
+      <tr><td>Diagnostic-arm tables</td><td><code>model_comparison/diagnostic_*.csv</code>, <code>delay_vs_ode_*.csv</code></td></tr>
+      <tr><td>Tmax and mean curves vs PK-Sim</td><td><code>model_comparison/curve_tmax/</code></td></tr>
+      <tr><td>M5 vs M3, all 27 arms</td><td><code>model_comparison/m5_vs_m3_all27/</code></td></tr>
+      <tr><td>M5 results, BE sweep, BE comparison</td><td><code>output_rich_m5/</code>, <code>output_sweep_2d_poppk_m5/</code>, <code>output_rich_m5/compare/</code></td></tr>
+      <tr><td>M3 results (fallback)</td><td><code>output_rich_v2/</code>, <code>output_sweep_2d_poppk_v2/</code>, <code>output_rich_v2/compare/</code></td></tr>
+      <tr><td>Pumas sources and fit scripts</td><td><code>felodipine_poppk_pumas/src/</code> and <code>scripts/</code> (02b M3, 02c M5, 04–06 diagnostics)</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<footer>Felodipine ER model-informed bioequivalence project · PopPK model testing, 16–25 October 2026.</footer>
+
+</div>

@@ -1,0 +1,14 @@
+<section id="earlypeak" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">PopPK · curve shape</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:56px;font-weight:600;line-height:1.15;color:#14213D">A second release component fixes the early peak</h2>
+<div style="display:flex;gap:48px;align-items:start">
+<img src="/_blob/fa4ac37028a60cdcb9360acde3884caf" alt="Mean concentration from 0 to 12 h for five diagnostic arms: PK-Sim truth in black and each PopPK model variant as a coloured line" style="width:1100px;height:578px;object-fit:contain;background:#FFFFFF;border:1px solid #DCE1E8">
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:28px;line-height:1.4"><b>M3</b> peaked 0.4–0.7 h early; at shape 1.5 only 28% of subjects were within 0.5 h of PK-Sim.</p>
+<p style="font-size:28px;line-height:1.4"><b>Estimating the lag</b> did not help: it lands at about 0.3 h and the fits get worse.</p>
+<p style="font-size:28px;line-height:1.4"><b>M5:</b> Tmax bias −0.3 to +0.15 h, 69% within 0.5 h at shape 1.5, mean-curve error 1.2–4.6%.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">felo_08 · curve_tmax/fig_mean_curves.png · Tmax and curves against noise-free PK-Sim</p>
+<aside>The pink line is M5 and the blue line M3; black is the PK-Sim mean. Two physiological explanations were ruled out first: gut-wall extraction varying with release rate (AUC per fraction absorbed is flat within plus or minus 3 percent across the 27 arms) and a deconvolution against PK-Sim's absorbed-into-mucosa output, which was inconclusive. One release time scale and one ka cannot give both the fast initial phase and the long tail; the two-component release can. The components are descriptive, not two physical populations.</aside>
+</section>

@@ -1,0 +1,116 @@
+=== 21:50 fits
+=== 07:44 collect: 27 arms
+Collected 27 arms -> poppk-fits/output_m5 and Felodipine-BCSII/poppk/output_rich_m5
+27×13 DataFrame
+ Row │ T50      shape    basin               tvt50     tvgamma   tvka      tvcl     tvvc       tvq         tvvp       sigma_p   LL          LL_other
+     │ Float64  Float64  String31            Float64   Float64   Float64   Float64  Float64    Float64     Float64    Float64   Float64     Float64?
+─────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   1 │    4.78    0.5    absorption_limited   7.58669  0.860663  3.53064   334.166    71.9421   66.3162    722.189    0.155533  -438.619    missing
+   2 │    4.07    0.6    absorption_limited   7.95577  0.925341  3.76126   313.538    60.0628   46.9372    492.469    0.159256  -479.489       -479.489
+   3 │    4.78    0.6    release_limited      8.12821  0.934891  4.02209   319.781    75.8248   58.9199    595.408    0.155591  -411.155       -411.155
+   4 │    5.74    0.6    absorption_limited   8.60966  0.934313  4.34969   328.773    87.8789   65.7096    639.37     0.152918  -341.81     missing
+   5 │    6.31    0.6    absorption_limited   8.93455  0.945891  3.91005   330.224    85.992    65.962     673.871    0.157672  -373.08     missing
+   6 │    2.39    0.764  absorption_limited   5.00171  0.723753  0.663304  293.75     66.8589   28.5699    199.038    0.164411  -433.071    missing
+   7 │    3.35    0.764  absorption_limited   7.69899  0.988959  3.21849   294.99     92.8734   17.6221    122.678    0.156942  -363.008    missing
+   8 │    4.07    0.764  absorption_limited   8.63853  1.01987   3.09483   298.354    66.4762   17.7153    105.973    0.155357  -325.481    missing
+   9 │    4.42    0.764  absorption_limited   8.42547  1.01623   2.79401   300.237    84.1877   36.1351    273.159    0.156878  -317.876    missing
+  10 │    4.78    0.764  absorption_limited   9.34119  1.0354    3.25675   303.871    67.9827   18.0723    143.382    0.161168  -347.809    missing
+  11 │    5.26    0.764  absorption_limited   8.85127  1.03315   3.64802   306.555    74.6861   54.7161    425.65     0.153685  -260.83     missing
+  12 │    5.74    0.764  absorption_limited   8.97614  1.02672   3.17603   309.354    82.4609   68.5351    527.986    0.151945  -215.256    missing
+  13 │    7.17    0.764  absorption_limited  10.2706   1.05988   3.3499    319.295    82.5189   54.7175    504.818    0.159187  -215.844    missing
+  14 │    9.56    0.764  absorption_limited  11.4215   1.07585   4.12315   333.011    90.1364   71.6352    697.594    0.156052   -84.8975   missing
+  15 │    4.07    0.9    absorption_limited   8.77994  1.09269   2.70515   294.012    81.5588    0.635982    1.31116  0.157951  -214.334    missing
+  16 │    4.78    0.9    absorption_limited   8.60214  1.06922   2.2055    296.228   105.244    35.9748    147.912    0.159272  -202.01     missing
+  17 │    5.74    0.9    absorption_limited  10.1152   1.12088   3.09226   301.857    92.5731   20.4525     91.6136   0.158296  -146.182    missing
+  18 │    4.07    1.0    absorption_limited   5.6242   0.835134  0.393167  290.344    59.959    23.9678    139.89     0.153315   -85.2016   missing
+  19 │    4.78    1.0    absorption_limited   8.98412  1.12801   2.19278   292.58     93.4938   33.5293     65.4029   0.161632  -127.641    missing
+  20 │    5.74    1.0    absorption_limited   9.63184  1.14455   2.3443    297.486    96.22     45.8943    157.557    0.154758    -9.85632  missing
+  21 │    6.31    1.0    absorption_limited  10.794    1.19283   2.33429   302.55     68.7418   14.2109     52.2046   0.160643   -16.8592   missing
+  22 │    4.07    1.2    absorption_limited   4.97988  0.778484  0.399141  290.727   171.827   172.716      74.5908   0.166866   -72.9157   missing
+  23 │    4.78    1.2    absorption_limited   5.37841  0.817762  0.323427  291.873   159.141    56.1622     52.4561   0.161449    54.8321   missing
+  24 │    5.74    1.2    absorption_limited   5.7984   0.8521    0.302521  291.108   166.232    58.5984    154.455    0.155574   190.866    missing
+  25 │    6.31    1.2    absorption_limited   8.51551  1.07805   0.585018  296.759   150.465    36.8219    136.559    0.169026   113.635    missing
+  26 │    6.88    1.2    absorption_limited  10.639    1.27369   2.2799    294.935   142.425    57.611     132.401    0.166957   188.363    missing
+  27 │    4.78    1.5    absorption_limited   1.35331  0.871155  0.79153   286.191  2301.06     35.1346    283.5      0.185402    37.7172   missing
+=== 07:44 Felodipine-BCSII/scripts/felo_02_be_sweep.jl Felodipine-BCSII/poppk/output_rich_m5/pk_analyses_format Felodipine-BCSII/poppk/output_sweep_2d_poppk_m5
+Formulations: 27   ref (T50 = 4.78, shape = 0.764)   arm fasted   n(2x2) = 54
+
+axis     T50  shape |   GMR_C   GMR_A |  ABE_C  ABE_A  joint |  RSABE   ABEL
+shape   4.78  0.500 |   1.199   0.907 |  0.165  0.810  0.120 |  0.411  0.295
+shape   4.07  0.600 |   1.170   0.968 |  0.261  0.987  0.237 |  0.529  0.408
+shape   4.78  0.600 |   1.080   0.949 |  0.714  0.965  0.668 |  0.859  0.794
+shape   5.74  0.600 |   0.983   0.923 |  0.876  0.889  0.782 |  0.958  0.929
+shape   6.31  0.600 |   0.940   0.918 |  0.758  0.869  0.670 |  0.899  0.841
+T50     2.39  0.764 |   1.482   1.035 |  0.000  0.987  0.000 |  0.002  0.000
+T50     3.35  0.764 |   1.235   1.030 |  0.087  0.994  0.070 |  0.267  0.170
+T50     4.07  0.764 |   1.109   1.019 |  0.556  0.997  0.523 |  0.763  0.692
+T50     4.42  0.764 |   1.039   1.012 |  0.851  0.997  0.844 |  0.941  0.918
+ref     4.78  0.764 |   1.000   1.000 |  0.899  0.998  0.899 |  0.970  0.945
+T50     5.26  0.764 |   0.948   0.991 |  0.781  0.996  0.789 |  0.915  0.866
+T50     5.74  0.764 |   0.901   0.982 |  0.526  0.995  0.548 |  0.754  0.666
+T50     7.17  0.764 |   0.777   0.951 |  0.014  0.969  0.015 |  0.112  0.060
+T50     9.56  0.764 |   0.649   0.911 |  0.000  0.832  0.000 |  0.000  0.000
+shape   4.07  0.900 |   1.102   1.034 |  0.604  0.991  0.552 |  0.782  0.703
+shape   4.78  0.900 |   0.995   1.026 |  0.885  0.996  0.888 |  0.959  0.935
+shape   5.74  0.900 |   0.888   1.007 |  0.430  0.998  0.457 |  0.685  0.585
+shape   4.07  1.000 |   1.137   1.047 |  0.414  0.974  0.370 |  0.669  0.570
+shape   4.78  1.000 |   1.022   1.039 |  0.873  0.986  0.863 |  0.953  0.932
+shape   5.74  1.000 |   0.904   1.022 |  0.551  0.996  0.567 |  0.765  0.686
+shape   6.31  1.000 |   0.837   1.005 |  0.158  0.998  0.154 |  0.372  0.268
+shape   4.07  1.200 |   1.228   1.046 |  0.098  0.981  0.082 |  0.302  0.188
+shape   4.78  1.200 |   1.101   1.042 |  0.611  0.985  0.566 |  0.804  0.713
+shape   5.74  1.200 |   0.987   1.044 |  0.885  0.982  0.865 |  0.958  0.930
+shape   6.31  1.200 |   0.908   1.024 |  0.585  0.994  0.604 |  0.791  0.708
+shape   6.88  1.200 |   0.846   1.031 |  0.196  0.994  0.202 |  0.445  0.315
+shape   4.78  1.500 |   1.227   1.060 |  0.097  0.958  0.079 |  0.296  0.192
+
+Wrote CSVs to Felodipine-BCSII/poppk/output_sweep_2d_poppk_m5
+=== 07:45 Felodipine-BCSII/scripts/felo_03_safespace_2d.jl Felodipine-BCSII/poppk/output_sweep_2d_poppk_m5
+Calibrated vs simulated joint ABE power at the 27 points: max |diff| 0.034, median 0.010
+15×8 DataFrame
+ Row │ method            shape    T50_lo   T50_hi   ratio_lo  ratio_hi  open_lo  open_hi
+     │ String            Float64  Float64  Float64  Float64   Float64   Bool     Bool
+─────┼───────────────────────────────────────────────────────────────────────────────────
+   1 │ ABE (2x2, n=54)     0.6      5.155    5.59   1.07845    1.16946    false    false
+   2 │ ABE (2x2, n=54)     0.764    4.365    5.215  0.91318    1.091      false    false
+   3 │ ABE (2x2, n=54)     0.9      4.4      5.125  0.920502   1.07218    false    false
+   4 │ ABE (2x2, n=54)     1.0      4.605    5.305  0.963389   1.10983    false    false
+   5 │ ABE (2x2, n=54)     1.2      5.195    5.965  1.08682    1.24791    false    false
+   6 │ EMA ABEL (n=24)     0.6      4.8      6.31   1.00418    1.32008    false     true
+   7 │ EMA ABEL (n=24)     0.764    4.225    5.45   0.883891   1.14017    false    false
+   8 │ EMA ABEL (n=24)     0.9      4.22     5.345  0.882845   1.1182     false    false
+   9 │ EMA ABEL (n=24)     1.0      4.415    5.515  0.92364    1.15377    false    false
+  10 │ EMA ABEL (n=24)     1.2      4.955    6.155  1.03661    1.28766    false    false
+  11 │ FDA RSABE (n=24)    0.6      4.61     6.31   0.964435   1.32008    false     true
+  12 │ FDA RSABE (n=24)    0.764    4.115    5.645  0.860879   1.18096    false    false
+  13 │ FDA RSABE (n=24)    0.9      4.085    5.525  0.854603   1.15586    false    false
+  14 │ FDA RSABE (n=24)    1.0      4.28     5.69   0.895397   1.19038    false    false
+  15 │ FDA RSABE (n=24)    1.2      4.79     6.305  1.00209    1.31904    false    false
+Wrote Felodipine-BCSII/poppk/output_sweep_2d_poppk_m5/fig_safespace_2d_joint.png
+=== 07:46 Felodipine-BCSII/scripts/felo_03_safespace_2d.jl Felodipine-BCSII/output_sweep_2d Felodipine-BCSII/poppk/output_sweep_2d_poppk_m5 PopPK-M5
+Calibrated vs simulated joint ABE power at the 27 points: max |diff| 0.035, median 0.009
+Calibrated vs simulated joint ABE power at the 27 points: max |diff| 0.034, median 0.010
+15×8 DataFrame
+ Row │ method            shape    T50_lo   T50_hi   ratio_lo  ratio_hi  open_lo  open_hi
+     │ String            Float64  Float64  Float64  Float64   Float64   Bool     Bool
+─────┼───────────────────────────────────────────────────────────────────────────────────
+   1 │ ABE (2x2, n=54)     0.6      5.25     5.84   1.09833    1.22176    false    false
+   2 │ ABE (2x2, n=54)     0.764    4.37     5.225  0.914226   1.0931     false    false
+   3 │ ABE (2x2, n=54)     0.9      4.465    5.275  0.9341     1.10356    false    false
+   4 │ ABE (2x2, n=54)     1.0      4.67     5.485  0.976987   1.14749    false    false
+   5 │ ABE (2x2, n=54)     1.2      5.24     6.095  1.09623    1.2751     false    false
+   6 │ EMA ABEL (n=24)     0.6      4.9      6.31   1.0251     1.32008    false     true
+   7 │ EMA ABEL (n=24)     0.764    4.19     5.455  0.876569   1.14121    false    false
+   8 │ EMA ABEL (n=24)     0.9      4.29     5.49   0.89749    1.14854    false    false
+   9 │ EMA ABEL (n=24)     1.0      4.485    5.7    0.938285   1.19247    false    false
+  10 │ EMA ABEL (n=24)     1.2      5.035    6.325  1.05335    1.32322    false    false
+  11 │ FDA RSABE (n=24)    0.6      4.73     6.31   0.98954    1.32008    false     true
+  12 │ FDA RSABE (n=24)    0.764    4.065    5.625  0.850418   1.17678    false    false
+  13 │ FDA RSABE (n=24)    0.9      4.16     5.655  0.870293   1.18305    false    false
+  14 │ FDA RSABE (n=24)    1.0      4.36     5.865  0.912134   1.22699    false    false
+  15 │ FDA RSABE (n=24)    1.2      4.9      6.495  1.0251     1.35879    false    false
+Wrote Felodipine-BCSII/output_sweep_2d/fig_safespace_2d_overlay_PopPKM5.png
+=== 07:46 Felodipine-BCSII/scripts/felo_05_poppk_diagnostics.jl Felodipine-BCSII/poppk/output_rich_m5
+Per-subject PopPK/PBPK: Cmax GM 0.997 (arms 0.976-1.019), AUC_0-t GM 0.998 (arms 0.989-1.004)
+Wrote diagnostics to Felodipine-BCSII/poppk/output_rich_m5/diagnostics
+=== 07:47 ALL DONE

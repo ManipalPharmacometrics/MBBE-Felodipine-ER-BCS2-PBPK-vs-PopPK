@@ -1,0 +1,376 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Felodipine ER model fix</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap"><style>body{margin:0;background:#2b2f36;font-family:system-ui,sans-serif;color:#ddd}
+h1.t{font-size:20px;padding:16px 24px;margin:0;color:#fff}.wrap{width:min(1200px,96vw);margin:0 auto 40px}
+.num{font-size:13px;margin:6px 0;color:#aab}.frame{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#fff}
+.s{position:absolute!important;left:0;top:0;width:1920px;height:1080px;box-sizing:border-box;transform-origin:0 0}
+.s *{box-sizing:border-box;margin:0}.s table{border-collapse:collapse;width:100%}.s th,.s td{padding:10px 16px;text-align:left}
+.s ul,.s ol{padding-left:1.2em}.s x-shape{display:block}
+.notes{background:#1f2228;padding:8px 14px;font-size:14px;line-height:1.5}.notes summary{cursor:pointer;color:#9bd}</style></head><body><h1 class="t">Felodipine ER model fix <small style="font-weight:400;color:#aab">— offline copy of docs/Explainer-deck_PKSim-model-fix_offline.html, 27 Oct 2026</small></h1><div class="wrap"><div class="num">Slide 1 / 19</div><div class="frame"><section class="s" id="cover" data-transition="fade" style="background:#14213D;color:#F7F6F2;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between">
+<p style="font-size:28px;color:#8FB8E8;letter-spacing:2px;text-transform:uppercase">MBBE drug two · PK-Sim 12.2 · OSP Felodipine model</p>
+<div style="display:flex;flex-direction:column;gap:40px">
+<h1 style="font-family:'Source Serif 4', Georgia, serif;font-size:96px;font-weight:600;line-height:1.1;color:#F7F6F2">Felodipine ER PBPK:<br>finding and fixing the Cmax bias</h1>
+<p style="font-size:36px;line-height:1.4;color:#C9D3E3;width:1400px">What we tested, what each test showed, and why the reference model is locked the way it is.</p>
+</div>
+<p style="font-size:28px;color:#C9D3E3">Work of 13–14 October 2026 · Record: project notes (not included)</p>
+
+</section>
+</div><details class="notes"><summary>Speaker notes</summary><p>Purpose: anyone asking later "why does the felodipine reference look like this?" should be able to follow the chain of evidence. Every number here comes from PK-Sim exports in Felodipine-BCSII/ and is logged in the project notes, sections 2 and 8 to 9.6.</p></details></div><div class="wrap"><div class="num">Slide 2 / 19</div><div class="frame"><section class="s" id="context" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Context</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#14213D">Felodipine ER tests the safe-space method on a second, high-variability drug</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FFFFFF;padding:40px;border:1px solid #DCE1E8;border-radius:16px">
+<h3 style="font-size:36px;font-weight:600;color:#14213D">What it is kept for</h3>
+<p style="font-size:28px;line-height:1.45">Release-rate CQAs: Weibull T50 × shape on Plendil ER. Cmax within-subject CV ≈ 36% (MHRA PAR), so ABE is primary, with RSABE as a sensitivity. Food effect.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FFFFFF;padding:40px;border:1px solid #DCE1E8;border-radius:16px">
+<h3 style="font-size:36px;font-weight:600;color:#14213D">What it was dropped for</h3>
+<p style="font-size:28px;line-height:1.45">Particle size and solubility. Plendil ER is surfactant-solubilised in an HPMC matrix, and no particle radius fits IR better than the shipped Weibull.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FFFFFF;padding:40px;border:1px solid #DCE1E8;border-radius:16px">
+<h3 style="font-size:36px;font-weight:600;color:#14213D">What the model must do</h3>
+<p style="font-size:28px;line-height:1.45">Fasted ER Cmax <b>and</b> AUC within 1.25-fold of observed. That's our criterion, stricter than OSP's 2-fold "validated".</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">Source: planning notes §3.9, §4, §9 · project notes §2–3</p>
+
+</section>
+</div><details class="notes"><summary>Speaker notes</summary><p>Felodipine is MBBE drug two. Metformin covers a low-variability BCS III product; felodipine adds a high-variability ER product on a real FDA product-specific guidance. The acceptance bar is 1.25-fold on both Cmax and AUC, because Cmax is the endpoint BE decisions turn on. The OSP library model is only validated to 2-fold.</p></details></div><div class="wrap"><div class="num">Slide 3 / 19</div><div class="frame"><section class="s" id="shipped" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Starting point</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#14213D">The shipped ER model gets AUC right and underpredicts Cmax by about 22%</h2>
+<div style="display:flex;gap:64px;align-items:start">
+<table style="flex:1;font-size:28px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#E6EAF0"><th style="width:40%">Formulation</th><th style="width:20%;text-align:right">T50</th><th style="width:20%;text-align:right">Lag</th><th style="width:20%;text-align:right">Shape</th></tr>
+<tr><td>ER tablet (Weibull)</td><td style="text-align:right">286.95 min</td><td style="text-align:right">18.68 min</td><td style="text-align:right">0.764</td></tr>
+<tr><td>IR tablet (Weibull)</td><td style="text-align:right">46.50 min</td><td style="text-align:right">0</td><td style="text-align:right">0.888</td></tr>
+<tr><td>Oral solution</td><td style="text-align:right">dissolved</td><td style="text-align:right">–</td><td style="text-align:right">–</td></tr>
+</table>
+<div style="width:560px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:4px;background:#FFFFFF;padding:32px;border:1px solid #DCE1E8;border-left:8px solid #C8641E;border-radius:12px">
+<p style="font-size:24px;color:#6B7585">Cmax pred/obs, 4 ER 10 mg studies</p>
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;color:#14213D">0.78 <span style="color:#C8641E">fails</span></p>
+</div>
+<div style="display:flex;flex-direction:column;gap:4px;background:#FFFFFF;padding:32px;border:1px solid #DCE1E8;border-left:8px solid #2F6FB0;border-radius:12px">
+<p style="font-size:24px;color:#6B7585">AUC0–tlast pred/obs</p>
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;color:#14213D">1.03 <span style="color:#2F6FB0">passes</span></p>
+</div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">Studies: Edgar 1987, Bailey 1996, Bailey 2003, Gelal 2005 · geometric means · project notes §1, §2.2</p>
+
+</section>
+</div><details class="notes"><summary>Speaker notes</summary><p>OSP Felodipine-Model snapshot, loaded in PK-Sim 12.2 with no errors. Both tablets are fitted Weibulls; there is no particle formulation. Against the four ER 10 mg fasted studies attached to the "ER tablet 10mg" simulation, AUC passes our 1.25-fold criterion but Cmax is about 22% low. Per study, Cmax ranged from 0.63 (Bailey 1996) to 1.05 (Gelal 2005).</p></details></div><div class="wrap"><div class="num">Slide 4 / 19</div><div class="frame"><section class="s" id="particle" data-transition="fade" style="background:#ECEEF1;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Day 1 · particle-size sensitivity</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#14213D">No particle radius beats the shipped Weibull, so particle size was dropped</h2>
+<div style="display:flex;gap:56px;align-items:start">
+<table style="flex:1;font-size:26px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#DDE2EA"><th style="width:28%">IR formulation</th><th style="width:18%;text-align:right">Cmax p/o</th><th style="width:18%;text-align:right">tmax (h)</th><th style="width:18%;text-align:right">Peaks</th><th style="width:18%;text-align:right">log-RMSE</th></tr>
+<tr style="background:#FFFFFF"><td><b>Weibull (shipped)</b></td><td style="text-align:right">1.32</td><td style="text-align:right">1.2</td><td style="text-align:right">1</td><td style="text-align:right"><b>0.58</b></td></tr>
+<tr style="background:#FFFFFF"><td>1 µm</td><td style="text-align:right">2.29</td><td style="text-align:right">0.85</td><td style="text-align:right">1</td><td style="text-align:right">0.85</td></tr>
+<tr style="background:#FFFFFF"><td>3 µm</td><td style="text-align:right">1.31</td><td style="text-align:right">1.2</td><td style="text-align:right">2</td><td style="text-align:right">0.89</td></tr>
+<tr style="background:#FFFFFF"><td>10 µm</td><td style="text-align:right">1.11</td><td style="text-align:right">7.25</td><td style="text-align:right">1, late</td><td style="text-align:right">1.12</td></tr>
+<tr style="background:#FFFFFF"><td>50 µm</td><td style="text-align:right">0.47</td><td style="text-align:right">11.5</td><td style="text-align:right">1, late</td><td style="text-align:right">1.42</td></tr>
+</table>
+<div style="width:600px;display:flex;flex-direction:column;gap:20px">
+<h3 style="font-size:32px;font-weight:600;color:#14213D">Why it can't work</h3>
+<p style="font-size:28px;line-height:1.45">Lowering Cmax means slower dissolution. That carries undissolved drug into the colon, where it dissolves late (a second peak) and escapes gut CYP3A4, so AUC rises.</p>
+<p style="font-size:28px;line-height:1.45">Solubility is the same lever (rate ∝ S/r). Plendil ER is surfactant-solubilised, so neither is a real-product CQA.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">Edgar 1987 IR 10 mg (n=12), solubility fixed at 12 µg/mL · selected radii from the 8-point scan · project notes §2.4, decision D3</p>
+
+</section>
+</div><details class="notes"><summary>Speaker notes</summary><p>This is the first sensitivity analysis, done on day 1. The particle-dissolution formulation replaced the IR Weibull, and radius was scanned from 0.5 to 50 µm. The trade-off is structural, not a tuning problem. PK-Sim 12.2 Parameter Identification also cannot fit particle radius; the "radius" entries it offers are physiology parameters and must never be fitted for formulation work. Particle radius as a CQA now needs a different BCS II drug.</p></details></div><div class="wrap"><div class="num">Slide 5 / 19</div><div class="frame"><section class="s" id="split" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Data audit</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#14213D">The 0.78 was measured on the studies the Weibull was fitted to</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FFFFFF;padding:40px;border:1px solid #DCE1E8;border-top:8px solid #14213D;border-radius:12px">
+<h3 style="font-size:36px;font-weight:600;color:#14213D">Training set · 4 studies</h3>
+<p style="font-size:28px;line-height:1.45">Simulation "ER tablet 10mg": Edgar 1987, Bailey 1996, Bailey 2003, Gelal 2005 (serum).</p>
+<p style="font-size:28px;line-height:1.45">All four sit in OSP's PI "PI_IV+Solution+ER+DDI_additionalCL_3".</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FFFFFF;padding:40px;border:1px solid #DCE1E8;border-top:8px solid #2F6FB0;border-radius:12px">
+<h3 style="font-size:36px;font-weight:600;color:#14213D">Test set · 6 studies</h3>
+<p style="font-size:28px;line-height:1.45">Simulation "ER tablet 10mg_test": Dresser 2002, Dresser 2017, Bailey 1998, Bailey 2000, Lundahl 1997, Madsen 1996.</p>
+<p style="font-size:28px;line-height:1.45">In no PI, so these are OSP's external check. Never scored before 14 Oct.</p>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.45">Both simulations use the same individual, protocol and formulation; only the attached data differ. Both ship with output ending at 24 h, so every export here was re-run to 96 h. Guo 2007 ER 10 mg is in the snapshot but attached to no simulation.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">Source: snapshot JSON (Felodipine-Model, master) · project notes §8</p>
+
+</section>
+</div><details class="notes"><summary>Speaker notes</summary><p>The day-1 notes said ten fasted ER 10 mg plasma datasets sat together. The PK-Sim tree showed only four, which led to reading the snapshot JSON for the actual split. This matters for how the result is judged: a model that misses on its own training data has a structural problem, not an overfitting problem.</p></details></div><div class="wrap"><div class="num">Slide 6 / 19</div><div class="frame"><section class="s" id="all10" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Shipped model · all 10 fasted ER 10 mg studies</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#14213D">Cmax is low on the test set too: 0.80, right at the cut-off</h2>
+<div style="display:flex;gap:56px;align-items:start">
+<table style="flex:1;font-size:24px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#E6EAF0"><th style="width:22%">Set</th><th style="width:38%">Study</th><th style="width:20%;text-align:right">Cmax p/o</th><th style="width:20%;text-align:right">AUC p/o</th></tr>
+<tr><td>Train</td><td>Edgar 1987</td><td style="text-align:right">0.73</td><td style="text-align:right">0.87</td></tr>
+<tr><td>Train</td><td>Bailey 1996</td><td style="text-align:right">0.63</td><td style="text-align:right">1.07</td></tr>
+<tr><td>Train</td><td>Bailey 2003</td><td style="text-align:right">0.76</td><td style="text-align:right">1.04</td></tr>
+<tr><td>Train</td><td>Gelal 2005 (serum)</td><td style="text-align:right">1.05</td><td style="text-align:right">1.23</td></tr>
+<tr style="background:#ECEEF1"><td>Test</td><td>Lundahl 1997</td><td style="text-align:right">0.83</td><td style="text-align:right">1.16</td></tr>
+<tr style="background:#ECEEF1"><td>Test</td><td>Dresser 2017</td><td style="text-align:right">0.76</td><td style="text-align:right">0.90</td></tr>
+<tr style="background:#ECEEF1"><td>Test</td><td>Dresser 2002</td><td style="text-align:right">1.00</td><td style="text-align:right">1.32</td></tr>
+<tr style="background:#ECEEF1"><td>Test</td><td>Bailey 2000</td><td style="text-align:right">0.89</td><td style="text-align:right">1.23</td></tr>
+<tr style="background:#ECEEF1"><td>Test</td><td>Bailey 1998</td><td style="text-align:right">0.49</td><td style="text-align:right">0.81</td></tr>
+<tr style="background:#ECEEF1"><td>Test</td><td>Madsen 1996</td><td style="text-align:right">0.94</td><td style="text-align:right">1.43</td></tr>
+</table>
+<div style="width:520px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:4px;background:#FFFFFF;padding:28px;border:1px solid #DCE1E8;border-radius:12px">
+<p style="font-size:24px;color:#6B7585">Geometric mean, train / test / all</p>
+<p style="font-size:32px;color:#14213D"><b>Cmax</b> 0.78 / 0.80 / 0.79</p>
+<p style="font-size:32px;color:#14213D"><b>AUC</b> 1.04 / 1.12 / 1.09</p>
+</div>
+<p style="font-size:26px;line-height:1.45">Predicted peak: 4.60 nM at 3.0 h. Observed peaks range 4.4–9.4 nM, mostly at 4–5 h.</p>
+<p style="font-size:26px;line-height:1.45">Madsen's 24 h point (0.07 nM, near the LLOQ) drives its AUC of 1.43.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">Exports: ER_ref_all11_96h.xlsx, ER_test6_96h.xlsx · AUC0–tlast by trapezoid on the observed grid · project notes §9</p>
+
+</section>
+</div><details class="notes"><summary>Speaker notes</summary><p>One simulated curve, scored against each study's observed means. Cmax predicted is taken within each study's sampling window. On Cmax alone the test set is borderline, which could argue for accepting the model. The next slide shows why the miss is not random scatter.</p></details></div><div class="wrap"><div class="num">Slide 7 / 19</div><div class="frame"><section class="s" id="shape" data-transition="fade" style="background:#ECEEF1;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Where the error sits in time</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#14213D">The predicted profile is too flat: high early, low at the peak, high in the tail</h2>
+<div style="display:flex;gap:28px">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;padding:36px;border:1px solid #DCE1E8;border-radius:12px">
+<p style="font-size:26px;color:#6B7585">0–2 h</p>
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:88px;font-weight:600;color:#C8641E">1.23</p>
+<p style="font-size:26px">too high</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;padding:36px;border:1px solid #DCE1E8;border-radius:12px">
+<p style="font-size:26px;color:#6B7585">2–6 h (peak)</p>
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:88px;font-weight:600;color:#2F6FB0">0.90</p>
+<p style="font-size:26px">too low</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;padding:36px;border:1px solid #DCE1E8;border-radius:12px">
+<p style="font-size:26px;color:#6B7585">6–12 h</p>
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:88px;font-weight:600;color:#C8641E">1.22</p>
+<p style="font-size:26px">too high</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;padding:36px;border:1px solid #DCE1E8;border-radius:12px">
+<p style="font-size:26px;color:#6B7585">12–24 h (n=5)</p>
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:88px;font-weight:600;color:#C8641E">3.18</p>
+<p style="font-size:26px">much too high</p>
+</div>
+</div>
+<p style="font-size:30px;line-height:1.45;width:1500px">First hypothesis: the shipped Weibull shape (0.764, below 1) front-loads release and drags out a long tail. If so, freeing the <b>shape</b> as well as T50 should fix it.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">Geometric mean pred/obs of all observed points in each window, all 10 studies · project notes §9</p>
+
+</section>
+</div><details class="notes"><summary>Speaker notes</summary><p>Pooling every observed point by time window turns a borderline Cmax into a clear systematic pattern. A shape below 1 gives fast early release with a long tail. That made the release model the obvious first suspect, and the next section tests it.</p></details></div><div class="wrap"><div class="num">Slide 8 / 19</div><div class="frame"><section class="s" id="refit" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Fix 1 · Weibull refit (Parameter Identification)</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#14213D">The refit is well identified: only the shape moves</h2>
+<div style="display:flex;gap:56px;align-items:start">
+<table style="flex:1;font-size:28px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#E6EAF0"><th style="width:22%">Parameter</th><th style="width:20%;text-align:right">Shipped</th><th style="width:32%;text-align:right">Fitted ± 95% CI</th><th style="width:26%">Verdict</th></tr>
+<tr><td>T50</td><td style="text-align:right">287 min</td><td style="text-align:right">296 ± 52 min</td><td>no real change</td></tr>
+<tr><td>Shape</td><td style="text-align:right">0.764</td><td style="text-align:right">0.89 ± 0.08</td><td>real change</td></tr>
+<tr><td>Correlation</td><td style="text-align:right">–</td><td style="text-align:right">−0.53</td><td>not confounded</td></tr>
+</table>
+<div style="width:560px;display:flex;flex-direction:column;gap:20px">
+<h3 style="font-size:32px;font-weight:600;color:#14213D">Set-up</h3>
+<ul style="font-size:26px;line-height:1.5">
+<li>Fit on the 4 training studies, log scaling, weight 1</li>
+<li>Free: T50, shape. Fixed: lag 18.68 min and all physiology</li>
+<li>Levenberg–Marquardt, 10 random starts, sensitivity on</li>
+<li>All 10 starts reach total error 0.95; no bound hit</li>
+</ul>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">PK-Sim 12.2 PI on clone ER_ref_all11_96h · CI and correlation from the sensitivity rerun · project notes §9.1–9.2</p>
+
+</section>
+</div><details class="notes"><summary>Speaker notes</summary><p>Starts as far apart as T50 2452 min and shape 5.2 converged to the same point. The first run gave no confidence intervals; enabling sensitivity calculation produced them and shifted the estimates slightly. The shipped T50 lies inside the CI, and the shipped shape lies outside it.</p></details></div><div class="wrap"><div class="num">Slide 9 / 19</div><div class="frame"><section class="s" id="refitout" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Fix 1 · outcome</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#14213D">The refit fixes the early phase, but Cmax does not move</h2>
+<table style="font-size:28px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#E6EAF0"><th style="width:22%"></th><th style="width:13%;text-align:right">Cmax</th><th style="width:13%;text-align:right">AUC</th><th style="width:13%;text-align:right">0–2 h</th><th style="width:13%;text-align:right">2–6 h</th><th style="width:13%;text-align:right">6–12 h</th><th style="width:13%;text-align:right">12–24 h</th></tr>
+<tr><td>Train, shipped</td><td style="text-align:right">0.78</td><td style="text-align:right">1.04</td><td style="text-align:right">1.31</td><td style="text-align:right">0.86</td><td style="text-align:right">1.19</td><td style="text-align:right">1.83</td></tr>
+<tr><td><b>Train, refit</b></td><td style="text-align:right"><b>0.77</b></td><td style="text-align:right">1.07</td><td style="text-align:right"><b>1.02</b></td><td style="text-align:right">0.87</td><td style="text-align:right">1.31</td><td style="text-align:right">1.82</td></tr>
+<tr style="background:#ECEEF1"><td>Test, shipped</td><td style="text-align:right">0.80</td><td style="text-align:right">1.12</td><td style="text-align:right">1.18</td><td style="text-align:right">0.92</td><td style="text-align:right">1.24</td><td style="text-align:right">4.60</td></tr>
+<tr style="background:#ECEEF1"><td><b>Test, refit</b></td><td style="text-align:right"><b>0.79</b></td><td style="text-align:right">1.14</td><td style="text-align:right"><b>0.91</b></td><td style="text-align:right">0.94</td><td style="text-align:right">1.36</td><td style="text-align:right">4.74</td></tr>
+</table>
+<p style="font-size:30px;line-height:1.45;width:1600px">Fitted peak: 4.57 nM at 4.0 h, against 4.60 nM at 3.0 h shipped. Release can't raise the peak: faster release moves it earlier, which the early data rule out, and the tail stays high whatever release does. <b>So the cause sits outside the formulation.</b></p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">Values are geometric-mean pred/obs · fitted curve from Confidence Interval.xlsx · project notes §9.2</p>
+
+</section>
+</div><details class="notes"><summary>Speaker notes</summary><p>tmax now matches the data at 4 h, which is a real improvement. But the objective function weighs every log-scaled point equally, and the best compromise leaves the peak where it was. The observed profiles peak higher and fall faster at about the same AUC. Changing the input rate alone cannot produce that, which points to disposition.</p></details></div><div class="wrap"><div class="num">Slide 10 / 19</div><div class="frame"><section class="s" id="dispo" data-transition="fade" style="background:#ECEEF1;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Diagnostic · IV and oral solution (no release step)</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#14213D">The disposition is off, and two errors cancel in oral AUC</h2>
+<div style="display:flex;gap:56px;align-items:start">
+<table style="flex:1;font-size:28px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#DDE2EA"><th style="width:34%">IV 1.5 mg, Lundahl 1997</th><th style="width:22%;text-align:right">Model</th><th style="width:22%;text-align:right">Observed</th><th style="width:22%;text-align:right">Ratio</th></tr>
+<tr style="background:#FFFFFF"><td>AUC (µM·min)</td><td style="text-align:right">3.63</td><td style="text-align:right">4.59</td><td style="text-align:right">0.79</td></tr>
+<tr style="background:#FFFFFF"><td>CL (mL/min/kg)</td><td style="text-align:right">14.7</td><td style="text-align:right">11.6</td><td style="text-align:right">1.27</td></tr>
+<tr style="background:#FFFFFF"><td>Vss (mL/kg)</td><td style="text-align:right">4985</td><td style="text-align:right">3090</td><td style="text-align:right">1.61</td></tr>
+<tr style="background:#FFFFFF"><td>t½ (h)</td><td style="text-align:right">8.1</td><td style="text-align:right">5.7</td><td style="text-align:right">1.42</td></tr>
+</table>
+<div style="width:600px;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:28px;line-height:1.45"><b>Oral solution</b> (Edgar 1987): AUC 1.03, Cmax 1.24.</p>
+<p style="font-size:28px;line-height:1.45"><b>Bioavailability</b>: model ≈ 0.20, observed ≈ 0.15 (literature ~15%).</p>
+<p style="font-size:28px;line-height:1.45">CL too high × F too high gives oral AUC about right. The extra Vss and t½ still flatten any slow-input profile: low peak, high tail.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">Exports: IV_96h.xlsx, solution_96h.xlsx · observed values from PK-Sim NCA · IV and solution are different studies and subjects · project notes §9.3</p>
+
+</section>
+</div><details class="notes"><summary>Speaker notes</summary><p>IV pointwise: 0.58 to 0.83 over 0 to 7 h, about 1 at 9 to 13 h, 1.39 at 25 h. The ER tail excess (1.8 to 4.7) is bigger than the IV tail (1.39) or the solution tail (about 1), so a second, ER-only cause is likely: drug absorbed in the distal gut and colon with little gut-wall first pass. Caveat: F compares Edgar oral with Lundahl IV, so it is approximate.</p></details></div><div class="wrap"><div class="num">Slide 11 / 19</div><div class="frame"><section class="s" id="colon" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Fix 2 · colonic CYP3A4 sensitivity scan</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#14213D">Colonic CYP3A4 fixes the tail and F, but not Cmax</h2>
+<div style="display:flex;gap:56px;align-items:start">
+<table style="flex:1;font-size:26px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#E6EAF0"><th style="width:28%">Colon CYP3A4</th><th style="width:14%;text-align:right">F</th><th style="width:16%;text-align:right">Cmax</th><th style="width:16%;text-align:right">AUC</th><th style="width:26%;text-align:right">12–24 h tr / te</th></tr>
+<tr><td>0 (shipped)</td><td style="text-align:right">~0.20</td><td style="text-align:right">0.789</td><td style="text-align:right">1.089</td><td style="text-align:right">1.83 / 4.60</td></tr>
+<tr><td>10% of SI</td><td style="text-align:right">0.200</td><td style="text-align:right">0.789</td><td style="text-align:right">1.068</td><td style="text-align:right">1.49 / 3.93</td></tr>
+<tr><td>25% of SI</td><td style="text-align:right">0.186</td><td style="text-align:right">0.788</td><td style="text-align:right">1.054</td><td style="text-align:right">1.27 / 3.48</td></tr>
+<tr style="background:#E6EAF0"><td><b>50% of SI (chosen)</b></td><td style="text-align:right"><b>0.176</b></td><td style="text-align:right">0.787</td><td style="text-align:right"><b>1.042</b></td><td style="text-align:right"><b>1.12</b> / 3.14</td></tr>
+</table>
+<div style="width:560px;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:28px;line-height:1.45">The shipped model has CYP3A4 in the liver and small intestine (0.073) but <b>0 in every large-intestine segment</b>. Drug released in the colon escapes gut first pass.</p>
+<p style="font-size:28px;line-height:1.45">Human colon does express CYP3A4, at lower levels than the small intestine. A sourced point value is still open.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">SI = small-intestine level 0.0728; 50% = 0.036 in Caecum to Rectum · Cmax/AUC = GM pred/obs, all 10 studies · project notes §9.4–9.5</p>
+
+</section>
+</div><details class="notes"><summary>Speaker notes</summary><p>A one-parameter sensitivity scan at 10, 25 and 50 percent of the small-intestine level. Results move in order with the level, which checks that the edits took. 50 percent brings the training tail to 1.12 and F toward the observed 0.15. Cmax stays at 0.79 because colonic absorption only shapes the tail. The test-tail excess comes mainly from the 24 h points of Madsen 1996 and Lundahl 1997.</p></details></div><div class="wrap"><div class="num">Slide 12 / 19</div><div class="frame"><section class="s" id="decisions" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Decision log</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#14213D">Each step was a recorded decision, with its reason</h2>
+<table style="font-size:24px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#E6EAF0"><th style="width:10%">Date</th><th style="width:34%">Decision</th><th style="width:56%">Why</th></tr>
+<tr><td>13 Oct</td><td>Drop particle size and solubility</td><td>No radius beats the Weibull; the trade-off is structural; the product is surfactant-solubilised</td></tr>
+<tr><td>13 Oct</td><td>ABE primary, RSABE on Cmax as a sensitivity</td><td>The FDA guidance specifies a 2-way design; Cmax ISCV ≈ 36%</td></tr>
+<tr><td>14 Oct</td><td>Judge on train and test separately</td><td>The 0.78 came from the fit data; the 6 test studies had never been scored</td></tr>
+<tr><td>14 Oct</td><td>Don't adopt the Weibull refit</td><td>Well identified, but Cmax 0.77 against 0.78: no gain</td></tr>
+<tr><td>14 Oct</td><td>Option C over B (disposition refit)</td><td>C targets the ER-only error and leaves OSP's DDI-validated disposition untouched</td></tr>
+<tr><td>14 Oct</td><td>Colonic CYP3A4 at 50% of SI</td><td>Physiological, fixes the tail and F; best of the scan</td></tr>
+<tr><td>14 Oct</td><td>Skip the second refit (5c); accept Cmax ≈ 0.79</td><td>Colon CYP3A4 doesn't touch the peak; the residual bias is disposition (IV evidence)</td></tr>
+</table>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">Formal record: planning notes §9 · project notes §3, §9.2–9.6</p>
+
+</section>
+</div><details class="notes"><summary>Speaker notes</summary><p>The three options weighed on 14 October were: A, accept and document the bias; B, recalibrate clearance and distribution against IV and solution; C, a targeted colonic-absorption check. B was avoided because it rests on one IV study of 12 subjects and could break OSP's jointly fitted DDI validation. C was run, and A is the outcome for the remaining Cmax bias.</p></details></div><div class="wrap"><div class="num">Slide 13 / 19</div><div class="frame"><section class="s" id="reference" data-transition="fade" style="background:#14213D;color:#C9D3E3;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<p style="font-size:24px;color:#8FB8E8;letter-spacing:2px;text-transform:uppercase;font-weight:600">The locked reference</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#F7F6F2">Shipped ER Weibull + 50% colonic CYP3A4, with a documented Cmax bias of about 0.79</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#1E2D4F;padding:40px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;color:#F7F6F2">In the model</h3>
+<p style="font-size:28px;line-height:1.45">T50 286.95 min, lag 18.68 min, shape 0.764. Individual "European_colonCYP3A4_50": CYP3A4 0.036 in all large-intestine segments.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#1E2D4F;padding:40px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;color:#F7F6F2">Known limitation</h3>
+<p style="font-size:28px;line-height:1.45">Absolute Cmax is about 21% low. The cause is disposition (IV Vss ×1.6, t½ ×1.4), so the profile is flatter than observed.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#1E2D4F;padding:40px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;color:#F7F6F2">Deviations from the gate</h3>
+<p style="font-size:28px;line-height:1.45">Scope §3.9: #2 Cmax accepted with a bias; #3 fed arm not done; #4 no link to in-vitro dissolution. Sweep results are <b style="color:#F2B37A">provisional</b>.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#8E9BB3">project notes §9.6 · never "Update from" or "Commit to building block" on the colon clones: one resets the edit, the other spreads it</p>
+
+</section>
+</div><details class="notes"><summary>Speaker notes</summary><p>Risk to keep in mind: a flattened profile may make Cmax less sensitive to T50 and shape changes than it really is, so the sweep could understate how often BE fails. Plan: quantify that in the sweep by comparing the Cmax T/R spread against what observed variability implies. The red out-of-date icons on the colon clones are expected; they come from local edits to the individual and go away once simulations use the new individual building block.</p></details></div><div class="wrap"><div class="num">Slide 14 / 19</div><div class="frame"><section class="s" id="sweep" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">T50 × shape sweep · done 16 Oct</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#14213D">27 population runs: a coarse cross, then a 2-D fill</h2>
+<div style="display:flex;gap:56px;align-items:start">
+<table style="flex:1;font-size:26px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#E6EAF0"><th style="width:24%">Scan</th><th style="width:46%">Values</th><th style="width:30%">Held at</th></tr>
+<tr><td>T50</td><td>143, 201, 244, <b>287</b>, 344, 430, 574 min (×0.5 to ×2)</td><td>shape 0.764</td></tr>
+<tr><td>Shape</td><td>0.5, 0.6, <b>0.764</b>, 0.9, 1.0, 1.2, 1.5</td><td>T50 287 min</td></tr>
+<tr><td>2-D fill</td><td>244, 265, 316, 344, 379, 413 min × shapes 0.6–1.2</td><td>around the band</td></tr>
+<tr><td>Lag</td><td>18.68 min</td><td>all runs</td></tr>
+</table>
+<div style="width:600px;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:28px;line-height:1.45"><b>Population:</b> 100 healthy adults, 18–55 y, BMI 18.5–30, 50% female. The same 100 in every run, so test vs reference is paired.</p>
+<p style="font-size:28px;line-height:1.45"><b>Why 100, not 24:</b> felodipine needs n ≈ 52–56 per trial, so bootstrapping from 24 physiologies would repeat subjects heavily.</p>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.45">Exports per run: <b>Pop_T50_&lt;h&gt;h_b&lt;shape&gt;</b>-Results.csv and -PK-Analyses.csv, the same pair as metformin, analysed with the shared be_utils.jl (drug key, shape parser, WSV per drug × arm × endpoint, RSABE).</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">project notes §9.6, §9.17–9.20 · planning notes §2.2, §5.1, §7</p>
+
+</section>
+</div><details class="notes"><summary>Speaker notes</summary><p>The 2-D fill comes after the coarse cross shows where the BE boundaries sit, the same iterative approach as the metformin T50 sweep. The high first-pass (F about 15 percent) may make Cmax touchy, so a finer grid near the boundaries may be needed. Gate 1 before any population run: the new individual, run as a single simulation, has to reproduce the colon-50 clone (Cmax about 4.59 nM, F about 0.176).</p></details></div><div class="wrap"><div class="num">Slide 15 / 19</div><div class="frame"><section class="s" id="safespace" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Result · fasted safe space (provisional)</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.1;color:#14213D">BE holds in a chevron band, not a box</h2>
+<div style="display:flex;gap:56px;align-items:start">
+<img src="images/project__fig_safespace_2d_joint.png" alt="Joint ABE power over dissolution T50 and Weibull shape, with 0.80 contours for ABE, FDA RSABE and EMA ABEL" style="width:860px;height:650px;object-fit:contain;background:#FFFFFF;border:1px solid #DCE1E8">
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:28px;line-height:1.4"><b>At the reference shape:</b> T50 4.37–5.23 h (×0.91–1.09) gives joint ABE power ≥ 0.80 with n = 54.</p>
+<p style="font-size:28px;line-height:1.4"><b>Cmax decides it.</b> At a fixed T50, Cmax is lowest near shape 0.8 and rises either side, so a slower T50 can be offset by a shape further from 0.8.</p>
+<p style="font-size:28px;line-height:1.4"><b>RSABE / ABEL</b> (n = 24, Cmax) widen the band by about 0.2–0.4 h on each side.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">27 population runs · felo_03_safespace_2d.jl → output_sweep_2d/ · project notes §9.19–9.20</p>
+
+</section>
+</div><details class="notes"><summary>Speaker notes</summary><p>Power is only simulated at the 27 points. Between them the figure interpolates the log GMR on a triangulation, then converts it to power with a monotone calibration fitted to all the runs. That reproduces the simulated joint power within 0.036 at every point. Interpolating power directly split the band into false islands, so it was not used. ABE window by shape (joint with AUC 0-t, corrected 16 Oct pm): 0.6 gives 5.25–5.84 h; 0.9 gives 4.47–5.28 h; 1.0 gives 4.67–5.49 h; 1.2 gives 5.24–6.10 h. The plot stops at shape 1.25 because above 1.2 the only support is one run at shape 1.5. Everything is provisional until the fed arm (gate 3) and the dissolution link (gate 4) close, and it carries the accepted Cmax bias of about 0.79.</p></details></div><div class="wrap"><div class="num">Slide 16 / 19</div><div class="frame"><section class="s" id="fed" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:24px;color:#C8641E;letter-spacing:2px;text-transform:uppercase;font-weight:600">Fed arm · decision 16 Oct</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#14213D">PK-Sim gets the food effect backwards, so fed becomes a sensitivity</h2>
+<div style="display:flex;gap:56px;align-items:start">
+<table style="flex:1;font-size:26px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#E6EAF0"><th style="width:34%">Fed / fasted</th><th style="width:30%;text-align:right">Model (100 paired)</th><th style="width:36%;text-align:right">Plendil, observed</th></tr>
+<tr><td>Cmax ratio</td><td style="text-align:right"><b>0.96</b></td><td style="text-align:right"><b>1.6–2.8</b></td></tr>
+<tr><td>AUC ratio</td><td style="text-align:right">1.01</td><td style="text-align:right">1.0–1.1</td></tr>
+<tr><td>Median tmax</td><td style="text-align:right">2.75 → 5.0 h</td><td style="text-align:right">4.5 → 4.5 h</td></tr>
+</table>
+<div style="width:640px;display:flex;flex-direction:column;gap:20px">
+<h3 style="font-size:32px;font-weight:600;color:#14213D">Why</h3>
+<p style="font-size:28px;line-height:1.45">Release runs on a fixed clock, and the meal only slows stomach emptying, so the peak gets later and lower. Real Plendil sits in the upper stomach and empties in bursts, which gives late, high peaks.</p>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.45"><b>Decision (scope §6 fallback):</b> the claim covers the fasted safe space. Fed is reported as a statistical sensitivity: with fed variability (Cmax CV 36.5%, n = 56) the band is unchanged, 4.37–5.23 h at the reference shape.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">Observed: US label, Sandoz CA monograph (Plendil arm), Weitschies 2005 · reference/fed-arm-literature.md · scope §10</p>
+
+</section>
+</div><details class="notes"><summary>Speaker notes</summary><p>The Apotex monograph shows a 3.5-fold Cmax increase, but its fasted and fed studies used different subjects with about twice the exposure, so it was not used as a target. The mechanism comes from magnetic marker monitoring (Weitschies 2005) and its model (Bergstrand 2009): food keeps the tablet in the proximal stomach, released drug accumulates and empties in bursts, and more of it gets past the gut wall. Neither effect can be set in PK-Sim's meal event. A release model with gastric retention would take about a week and is out of scope. AUC agreement (1.01) confirms the fed run kept all 23 OSP settings.</p></details></div><div class="wrap"><div class="num">Slide 17 / 19</div><div class="frame"><section class="s" id="tablets" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">External check · Abrahamsson 1994</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#14213D">Three real tablets of the Plendil platform are reproduced within 1.25-fold</h2>
+<div style="display:flex;gap:56px;align-items:start">
+<table style="flex:1;font-size:26px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#E6EAF0"><th style="width:22%">Tablet</th><th style="width:26%;text-align:right">T50 · shape</th><th style="width:26%;text-align:right">Peak, model</th><th style="width:26%;text-align:right">Peak, observed</th></tr>
+<tr><td>A (fast)</td><td style="text-align:right">1.7 h · 1.18</td><td style="text-align:right">11.4 nM</td><td style="text-align:right">9.5 nM</td></tr>
+<tr><td>B</td><td style="text-align:right">6.1 h · 0.94</td><td style="text-align:right">4.8 nM</td><td style="text-align:right">5.0 nM</td></tr>
+<tr><td>C (slow)</td><td style="text-align:right">19.8 h · 1.10</td><td style="text-align:right">2.1 nM</td><td style="text-align:right">2.3 nM</td></tr>
+<tr style="background:#E6EAF0"><td>Ratio B/C</td><td></td><td style="text-align:right">2.31</td><td style="text-align:right">2.17</td></tr>
+<tr style="background:#E6EAF0"><td>Ratio A/B</td><td></td><td style="text-align:right">2.36</td><td style="text-align:right">1.90</td></tr>
+</table>
+<div style="width:600px;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:28px;line-height:1.45"><b>What it tests:</b> how strongly Cmax responds to release rate, which sets the width of the safe space.</p>
+<p style="font-size:28px;line-height:1.45"><b>Slow side</b> matches within 6%. <b>Fast side</b> is overstated by about 25%, so the band's short-T50 edge is conservative.</p>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.45"><b>Gate #4:</b> the reference also sits mid-window of the USP limits read through the paper's in-vitro/in-vivo correlation. It's consistent, but not an exact correlation for Plendil itself.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">Abrahamsson et al. Pharm Res 1994;11:1093 (n = 16) · reference/digitised/ · output_tablets1994/ · project notes §9.24–9.25</p>
+
+</section>
+</div><details class="notes"><summary>Speaker notes</summary><p>Tablets A, B and C are Astra hydrophilic-matrix felodipine ER 10 mg tablets that differ only in the viscosity of the HPMC. They were given in a four-way crossover with an oral solution to 16 young healthy men. Each tablet's in-vivo dissolution curve (paper Fig 4) was digitised and fitted with a Weibull at our lag, then run as a clone of Pop_ref. The observed values are peaks of the mean curves, so the model values are computed the same way. The model under-predicts AUC for the slowest tablet (C/B 0.80 vs 0.93) because colonic absorption is too low for very slow release; that region is far outside the BE band. Caveats: the Weibulls come from deconvolution and were digitised by eye; C's T50 is poorly identified because only 60 percent had dissolved by 24 h; and the population differs (the model is 50 percent female).</p></details></div><div class="wrap"><div class="num">Slide 18 / 19</div><div class="frame"><section class="s" id="open" data-transition="fade" style="background:#ECEEF1;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Open items</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#14213D">What still has to close before the safe space is final</h2>
+<table style="font-size:26px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#DDE2EA"><th style="width:44%">Item</th><th style="width:56%">Why it matters</th></tr>
+<tr style="background:#FFFFFF"><td>Sourced colon-to-SI CYP3A4 ratio</td><td>50% is a scan choice, not yet a literature value</td></tr>
+<tr style="background:#FFFFFF"><td>Fed arm (gate #3)</td><td>Closed as a limitation: model Cmax ratio 0.96 vs 1.6–2.8; fed reported as a sensitivity</td></tr>
+<tr style="background:#FFFFFF"><td>Dissolution link (gate #4)</td><td>Closed as approximate: USP-consistent; Abrahamsson 1994 tablets reproduced within 1.25-fold</td></tr>
+<tr style="background:#FFFFFF"><td>Cmax sensitivity check in the sweep</td><td>A flattened profile may understate how often BE fails</td></tr>
+<tr style="background:#FFFFFF"><td>RSABE / ABEL edge at shape 0.6</td><td>Upper bound sits on the design edge (6.31 h); needs one run if RSABE becomes primary</td></tr>
+<tr style="background:#FFFFFF"><td>Guo 2007; Blychert 1990 market vs trial</td><td>An unscored study; a real two-formulation ER check of MBBE</td></tr>
+</table>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">project notes §5, §7, §9.6, §9.21–9.25 · planning notes §3.9, §7, §10</p>
+
+</section>
+</div><details class="notes"><summary>Speaker notes</summary><p>The population, the reference and the fasted sweep are done. They decide whether the sweep result can be called final rather than provisional. If the disposition bias proves to matter for the safe-space boundaries, option B (recalibrate clearance and distribution against IV and solution) is still on the table.</p></details></div><div class="wrap"><div class="num">Slide 19 / 19</div><div class="frame"><section class="s" id="status" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Status at 16 Oct · fasted sweep done</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#14213D">The reference is rebuilt and the fasted safe space is mapped</h2>
+<table style="font-size:26px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#E6EAF0"><th style="width:32%">Step</th><th style="width:68%">Outcome</th></tr>
+<tr><td>14 Oct mismatch</td><td>Configure drops OSP's tablet time delay factor (0.0695). To a population it also drops the 22 gut P mucosa values. Re-entered by hand; cloning keeps them.</td></tr>
+<tr><td>Colon-50 reference</td><td>Rebuilt and saved; matches the colon-50 clone to 3 × 10⁻⁵</td></tr>
+<tr><td>Population</td><td>Pop_ref: 100 adults, 50% female; every sweep run is a clone of it</td></tr>
+<tr><td>T50 × shape sweep</td><td>27 formulations, every export checked against its Weibull</td></tr>
+<tr><td>Fed reference</td><td>Cmax fed/fasted 0.96 vs 1.6–2.8 observed: fed arm becomes a sensitivity</td></tr>
+</table>
+<p style="font-size:28px;line-height:1.45"><b>Gate #4</b> closed as approximate: three Abrahamsson 1994 tablets are reproduced within 1.25-fold. <b>Next:</b> the remaining open items and the write-up.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">Project: Felodipine_ER_colon50.pksim5 · overrides: reference/ER_tablet_10mg_sim_overrides.csv · project notes §9.10–9.25</p>
+
+</section>
+</div><details class="notes"><summary>Speaker notes</summary><p>The paused state from 14 October is resolved. None of the 14 October PK-Sim work had been saved, so the colon-50 setup was rebuilt on 15 October; the original individual was confirmed clean (CYP3A4 36h profile, SI 0.07, LI 0). A snapshot diff showed that the 22 P mucosa overrides are an OSP fitted value (0.0892 cm/min), not cosmetic. The option of running variations here through a .pkml export and the ospsuite R package is still untried.</p></details></div><script>function fit(){document.querySelectorAll('.frame').forEach(f=>{f.querySelector('.s').style.transform='scale('+(f.clientWidth/1920)+')'})}
+addEventListener('resize',fit);addEventListener('load',fit);fit();</script></body></html>

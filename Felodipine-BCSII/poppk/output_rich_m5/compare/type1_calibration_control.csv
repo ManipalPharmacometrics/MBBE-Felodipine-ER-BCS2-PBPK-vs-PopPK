@@ -1,0 +1,13 @@
+source,endpoint,n,T1_scaled_ref
+PBPK,Cmax,24,0.047
+PBPK,Cmax,54,0.0496
+PBPK,AUC_tEnd,24,0.0507
+PBPK,AUC_tEnd,54,0.0496
+PBPK,Joint,24,0.00275
+PBPK,Joint,54,0.00295
+PopPK,Cmax,24,0.047
+PopPK,Cmax,54,0.0496
+PopPK,AUC_tEnd,24,0.0507
+PopPK,AUC_tEnd,54,0.0496
+PopPK,Joint,24,0.00275
+PopPK,Joint,54,0.00295

@@ -1,0 +1,5 @@
+tablet,T50_min,shape,model_meancurve_peak_nM,obs_meancurve_peak_nM,model_over_obs,model_GM_Cmax_nM,model_GM_AUCinf_nMh,obs_mean_AUC_nMh,model_peak_time_h,obs_peak_time_h
+A,102.0,1.18,11.39,9.5,1.20,10.74,90.6,88,2.8,3
+B,363.0,0.94,4.82,5.0,0.96,4.53,86.8,92,4.5,5
+C,1185,1.10,2.09,2.3,0.91,1.97,69.7,86,11.0,5
+ref_Plendil_OSP,286.95,0.764,5.48,,,5.16,86.1,,2.8,

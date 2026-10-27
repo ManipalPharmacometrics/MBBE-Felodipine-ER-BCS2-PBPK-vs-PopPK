@@ -1,0 +1,19 @@
+<section id="colon" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Fix 2 · colonic CYP3A4 sensitivity scan</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#14213D">Colonic CYP3A4 fixes the tail and F, but not Cmax</h2>
+<div style="display:flex;gap:56px;align-items:start">
+<table style="flex:1;font-size:26px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#E6EAF0"><th style="width:28%">Colon CYP3A4</th><th style="width:14%;text-align:right">F</th><th style="width:16%;text-align:right">Cmax</th><th style="width:16%;text-align:right">AUC</th><th style="width:26%;text-align:right">12–24 h tr / te</th></tr>
+<tr><td>0 (shipped)</td><td style="text-align:right">~0.20</td><td style="text-align:right">0.789</td><td style="text-align:right">1.089</td><td style="text-align:right">1.83 / 4.60</td></tr>
+<tr><td>10% of SI</td><td style="text-align:right">0.200</td><td style="text-align:right">0.789</td><td style="text-align:right">1.068</td><td style="text-align:right">1.49 / 3.93</td></tr>
+<tr><td>25% of SI</td><td style="text-align:right">0.186</td><td style="text-align:right">0.788</td><td style="text-align:right">1.054</td><td style="text-align:right">1.27 / 3.48</td></tr>
+<tr style="background:#E6EAF0"><td><b>50% of SI (chosen)</b></td><td style="text-align:right"><b>0.176</b></td><td style="text-align:right">0.787</td><td style="text-align:right"><b>1.042</b></td><td style="text-align:right"><b>1.12</b> / 3.14</td></tr>
+</table>
+<div style="width:560px;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:28px;line-height:1.45">The shipped model has CYP3A4 in the liver and small intestine (0.073) but <b>0 in every large-intestine segment</b>. Drug released in the colon escapes gut first pass.</p>
+<p style="font-size:28px;line-height:1.45">Human colon does express CYP3A4, at lower levels than the small intestine. A sourced point value is still open.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">SI = small-intestine level 0.0728; 50% = 0.036 in Caecum to Rectum · Cmax/AUC = GM pred/obs, all 10 studies · project notes §9.4–9.5</p>
+<aside>A one-parameter sensitivity scan at 10, 25 and 50 percent of the small-intestine level. Results move in order with the level, which checks that the edits took. 50 percent brings the training tail to 1.12 and F toward the observed 0.15. Cmax stays at 0.79 because colonic absorption only shapes the tail. The test-tail excess comes mainly from the 24 h points of Madsen 1996 and Lundahl 1997.</aside>
+</section>

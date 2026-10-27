@@ -1,0 +1,14 @@
+<section id="safespace" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Result · fasted safe space (provisional)</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.1;color:#14213D">BE holds in a chevron band, not a box</h2>
+<div style="display:flex;gap:56px;align-items:start">
+<img src="/_blob/cd8f3a1f701df436b9a4aec48faffbb3" alt="Joint ABE power over dissolution T50 and Weibull shape, with 0.80 contours for ABE, FDA RSABE and EMA ABEL" style="width:860px;height:650px;object-fit:contain;background:#FFFFFF;border:1px solid #DCE1E8">
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:28px;line-height:1.4"><b>At the reference shape:</b> T50 4.37–5.23 h (×0.91–1.09) gives joint ABE power ≥ 0.80 with n = 54.</p>
+<p style="font-size:28px;line-height:1.4"><b>Cmax decides it.</b> At a fixed T50, Cmax is lowest near shape 0.8 and rises either side, so a slower T50 can be offset by a shape further from 0.8.</p>
+<p style="font-size:28px;line-height:1.4"><b>RSABE / ABEL</b> (n = 24, Cmax) widen the band by about 0.2–0.4 h on each side.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">27 population runs · felo_03_safespace_2d.jl → output_sweep_2d/ · project notes §9.19–9.20</p>
+<aside>Power is only simulated at the 27 points. Between them the figure interpolates the log GMR on a triangulation, then converts it to power with a monotone calibration fitted to all the runs. That reproduces the simulated joint power within 0.036 at every point. Interpolating power directly split the band into false islands, so it was not used. ABE window by shape (joint with AUC 0-t, corrected 16 Oct pm): 0.6 gives 5.25–5.84 h; 0.9 gives 4.47–5.28 h; 1.0 gives 4.67–5.49 h; 1.2 gives 5.24–6.10 h. The plot stops at shape 1.25 because above 1.2 the only support is one run at shape 1.5. Everything is provisional until the fed arm (gate 3) and the dissolution link (gate 4) close, and it carries the accepted Cmax bias of about 0.79.</aside>
+</section>

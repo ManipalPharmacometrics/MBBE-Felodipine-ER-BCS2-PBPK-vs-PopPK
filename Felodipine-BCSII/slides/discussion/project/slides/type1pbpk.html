@@ -1,0 +1,17 @@
+<section id="type1pbpk" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">PBPK · Type I error</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:56px;font-weight:600;line-height:1.15;color:#14213D">ABE is calibrated at the boundary; scaled methods are not</h2>
+<table style="font-size:26px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#E6EAF0"><th style="width:28%">Simulated BE boundary</th><th style="width:12%;text-align:right">CQA</th><th style="width:15%;text-align:right">ABE n = 54</th><th style="width:15%;text-align:right">ABE n = 24</th><th style="width:15%;text-align:right">RSABE n = 24</th><th style="width:15%;text-align:right">ABEL n = 24</th></tr>
+<tr><td>T50, fast side (GMR 1.25)</td><td style="text-align:right">3.25 h</td><td style="text-align:right">5.0%</td><td style="text-align:right">3.8%</td><td style="text-align:right">22.2%</td><td style="text-align:right">13.9%</td></tr>
+<tr style="background:#FFFFFF"><td>T50, slow side (GMR 0.80)</td><td style="text-align:right">6.96 h</td><td style="text-align:right">4.5%</td><td style="text-align:right">3.7%</td><td style="text-align:right">20.2%</td><td style="text-align:right">12.8%</td></tr>
+<tr><td>Shape, high side (GMR 1.25)</td><td style="text-align:right">1.46</td><td style="text-align:right">4.9%</td><td style="text-align:right">3.3%</td><td style="text-align:right">22.0%</td><td style="text-align:right">13.8%</td></tr>
+<tr style="background:#FFFFFF"><td>Shape, low side</td><td style="text-align:right">none</td><td colspan="1" style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td></tr>
+</table>
+<div style="display:flex;gap:48px">
+<p style="flex:1;font-size:28px;line-height:1.4"><b>ABE</b> (joint Cmax and AUC₀₋ₜ) sits at or just under the nominal 5%. Cmax alone gives 4.7–5.1%; the TOST control gives 5.0%.</p>
+<p style="flex:1;font-size:28px;line-height:1.4"><b>RSABE / ABEL</b>: a product sitting exactly on the conventional limit passes 1 study in 5, or 1 in 7. That is by design for a highly variable drug, but it is what their wider contours mean.</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">felo_04 · 20 000 virtual trials per cell (Monte Carlo SE ≈ 0.15 pp) · poppk/output_rich/compare/</p>
+<aside>Method as for metformin (Morris): invert the CQA to GMR relationship to find where the GMR first leaves 0.80 to 1.25, walking out from the reference, then simulate the BE acceptance rate there. On the shape axis below the reference the Cmax GMR never reaches 1.25: it is 1.23 at shape 0.5, the lowest simulated. At n = 24 the joint rate falls under 5% because AUC can also fail. The RSABE and ABEL rates are Cmax only, full replicate, CVwR 34%.</aside>
+</section>

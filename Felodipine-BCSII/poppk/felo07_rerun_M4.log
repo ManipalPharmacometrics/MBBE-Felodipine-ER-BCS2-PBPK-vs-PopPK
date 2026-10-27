@@ -1,0 +1,45 @@
+M1  arms 27  ΣLL  -12894.5  Cmax ratio 0.872–1.135  |GMR err| max 20.0%  mean 5.7%
+M3  arms 27  ΣLL   -6077.3  Cmax ratio 0.976–1.043  |GMR err| max 3.5%  mean 1.6%
+38×11 DataFrame
+ Row │ arm         model    start                status         LL           AIC        sigma     Cmax_ratio_GM_true  Cmax_ratio_GM_R  Cmax_ratio_GM_T  GMR_Cmax_err_pct
+     │ String15    String3  String31             String15       Float64      Float64    Float64   Float64?            Float64?         Float64?         Float64
+─────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   1 │ 2.39_0.764  M1       disposition_limited  not converged    -718.554    1453.11   0.189933            0.961917    missing         missing            -11.6728
+   2 │ 2.39_0.764  M1       release_limited      not converged    -830.41     1676.82   0.210515            0.946563    missing         missing            -13.0827
+   3 │ 2.39_0.764  M2       disposition_limited  not converged    -603.067    1226.13   0.177732            1.02399     missing         missing             -5.97244
+   4 │ 2.39_0.764  M2       release_limited      not converged    -830.503    1681.01   0.210527            0.946631    missing         missing            -13.0759
+   5 │ 2.39_0.764  M3       absorption_limited   not converged    -480.718     983.436  0.169048            1.04266     missing         missing              3.07967
+   6 │ 2.39_0.764  M3       release_limited      not converged    -480.716     983.431  0.169035            1.04264     missing         missing              3.0776
+   7 │ 2.39_0.764  M4       absorption_limited   not converged  -38485.0     76995.9    0.150908      missing               Inf             Inf            NaN
+   8 │ 2.39_0.764  M4       release_limited      not converged   -2534.12     5094.24   0.338381      missing               Inf             Inf            NaN
+   9 │ 4.78_0.5    M1       disposition_limited  converged        -889.097    1794.19   0.194846            0.838729    missing         missing            -22.9844
+  10 │ 4.78_0.5    M1       release_limited      not converged    -786.492    1588.98   0.194688            0.871615    missing         missing            -19.9647
+  11 │ 4.78_0.5    M2       disposition_limited  not converged    -593.036    1206.07   0.162968            0.974053    missing         missing            -10.5579
+  12 │ 4.78_0.5    M2       release_limited      not converged    -708.99     1437.98   0.187214            0.891544    missing         missing            -18.1342
+  13 │ 4.78_0.5    M3       absorption_limited   not converged    -487.24      996.48   0.160649            0.975845    missing         missing             -3.52554
+  14 │ 4.78_0.5    M3       release_limited      not converged    -487.239     996.479  0.160652            0.975748    missing         missing             -3.53514
+  15 │ 4.78_0.5    M4       absorption_limited   not converged   -3871.37     7768.75   0.198206      missing               Inf             Inf            NaN
+  16 │ 4.78_0.5    M4       release_limited      not converged   -3370.33     6766.66   0.184685      missing               Inf             Inf            NaN
+  17 │ 4.78_0.764  M1       disposition_limited  not converged    -556.601    1129.2    0.176125            1.08904     missing         missing              0.0
+  18 │ 4.78_0.764  M1       release_limited      not converged    -675.25     1366.5    0.198767            0.981125    missing         missing             -9.90909
+  19 │ 4.78_0.764  M2       disposition_limited  not converged    -556.577    1133.15   0.176127            1.08903     missing         missing              0.0
+  20 │ 4.78_0.764  M2       release_limited      not converged    -674.876    1369.75   0.198921            0.981119    missing         missing             -9.90902
+  21 │ 4.78_0.764  M3       absorption_limited   not converged    -354.405     730.809  0.161846            1.01151     missing         missing              0.0
+  22 │ 4.78_0.764  M3       release_limited      not converged    -354.405     730.809  0.161847            1.0115      missing         missing             -0.000310289
+  23 │ 4.78_1.5    M1       disposition_limited  not converged    -365.958     747.915  0.2407              0.969315    missing         missing            -10.9935
+  24 │ 4.78_1.5    M1       release_limited      not converged   -1227.44     2470.88   0.383437            0.727985    missing         missing            -33.1534
+  25 │ 4.78_1.5    M2       disposition_limited  not converged    -361.205     742.411  0.240442            0.970996    missing         missing            -10.8386
+  26 │ 4.78_1.5    M2       release_limited      not converged    -247.002     514.004  0.226136            1.02623     missing         missing             -5.76711
+  27 │ 4.78_1.5    M3       absorption_limited   not converged    -210.853     443.706  0.217984            0.950934    missing         missing             -5.98838
+  28 │ 4.78_1.5    M3       release_limited      not converged     -59.3743    140.749  0.20139             0.984755    missing         missing             -2.64473
+  29 │ 4.78_1.5    M4       absorption_limited   not converged    -986.989    1999.98   0.24727       missing                 1.0449          0.947371      -9.33403
+  30 │ 4.78_1.5    M4       release_limited      converged        -986.989    1999.98   0.247279      missing                 1.04489         0.947362      -9.33352
+  31 │ 9.56_0.764  M1       disposition_limited  converged        -606.328    1228.66   0.208679            1.11157     missing         missing              2.0689
+  32 │ 9.56_0.764  M1       release_limited      converged        -395.4       806.8    0.18912             0.989365    missing         missing             -9.15239
+  33 │ 9.56_0.764  M2       disposition_limited  not converged    -597.864    1215.73   0.209168            1.1024      missing         missing              1.22714
+  34 │ 9.56_0.764  M2       release_limited      converged        -388.187     796.375  0.189741            0.988079    missing         missing             -9.26996
+  35 │ 9.56_0.764  M3       absorption_limited   not converged    -362.449     746.898  0.18889             1.00298     missing         missing             -0.84338
+  36 │ 9.56_0.764  M3       release_limited      converged        -107.787     237.573  0.15822             0.979409    missing         missing             -3.17324
+  37 │ 9.56_0.764  M4       absorption_limited   not converged   -1809.03     3644.05   0.258272      missing               Inf             Inf            NaN
+  38 │ 9.56_0.764  M4       release_limited      not converged   -4648.13     9322.25   0.15          missing               Inf             Inf            NaN
+Wrote -> Felodipine-BCSII/scripts/../poppk/model_comparison

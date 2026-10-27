@@ -1,0 +1,6 @@
+.DS_Store
+*.orig
+*.tmp
+.ipynb_checkpoints/
+*_cache/
+.quarto/

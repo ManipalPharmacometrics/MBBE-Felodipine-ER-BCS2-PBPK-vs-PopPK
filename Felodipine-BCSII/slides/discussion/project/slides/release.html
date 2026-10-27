@@ -1,0 +1,18 @@
+<section id="release" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">PopPK · model search</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:56px;font-weight:600;line-height:1.15;color:#14213D">Twelve structures tested; the dual-Weibull model wins on every arm</h2>
+<table style="font-size:24px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#E6EAF0"><th style="width:8%">Model</th><th style="width:27%">Structure</th><th style="width:16%;text-align:right">LL ref / shape 1.5</th><th style="width:17%;text-align:right">GMR error</th><th style="width:17%;text-align:right">Tmax bias</th><th style="width:15%">Outcome</th></tr>
+<tr><td>M1</td><td>Weibull → 1-cmt</td><td style="text-align:right">−557 / −366</td><td style="text-align:right">−20 to −9%</td><td style="text-align:right">−1.5 to +0.35 h</td><td>Rejected</td></tr>
+<tr style="background:#FFFFFF"><td>M2</td><td>Weibull → 2-cmt</td><td style="text-align:right">−557 / −247</td><td style="text-align:right">−11 to −6%</td><td style="text-align:right">−1.2 to +0.3 h</td><td>Not identified</td></tr>
+<tr><td>M3</td><td>Weibull → ka → 2-cmt</td><td style="text-align:right">−354 / −59</td><td style="text-align:right">−3.5 to +3.1%</td><td style="text-align:right">−0.7 to +0.1 h</td><td><b>Fallback</b></td></tr>
+<tr style="background:#FFFFFF"><td>M4</td><td>M3, reference + test paired</td><td style="text-align:right">not comparable</td><td style="text-align:right">−12 to +15%</td><td style="text-align:right">–</td><td>Rejected</td></tr>
+<tr><td>M3d</td><td>M3 in @delay form, lag 0.31 h</td><td style="text-align:right">−354 / −56</td><td style="text-align:right">as M3</td><td style="text-align:right">as M3</td><td>Equivalent</td></tr>
+<tr style="background:#FFFFFF"><td>M3d0</td><td>@delay, no lag</td><td style="text-align:right">−755 / −48</td><td style="text-align:right">−10 to 0%</td><td style="text-align:right">−0.4 to +0.55 h</td><td>Lag needed</td></tr>
+<tr><td>M3Lo</td><td>M3, lag estimated</td><td style="text-align:right">−526 / −329</td><td style="text-align:right">–</td><td style="text-align:right">–</td><td>Worse fits</td></tr>
+<tr style="background:#FCE9D6"><td><b>M5</b></td><td><b>Dual Weibull → ka → 2-cmt</b></td><td style="text-align:right"><b>−348 / +38</b></td><td style="text-align:right"><b>−3.3 to 0%</b></td><td style="text-align:right"><b>−0.3 to +0.15 h</b></td><td><b>Final</b></td></tr>
+<tr style="background:#FFFFFF"><td>M6</td><td>Weibull → 3 transit → 2-cmt</td><td style="text-align:right">−365 / +19</td><td style="text-align:right">−3.1 to +3.2%</td><td style="text-align:right">−0.45 to 0 h</td><td>Partial fix</td></tr>
+</table>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">5 diagnostic arms (4.78/0.764 ref, 4.78/0.5, 4.78/1.5, 2.39/0.764, 9.56/0.764) · model_testing_log.pdf</p>
+<aside>LL is the best log-likelihood from two starts; higher is better. GMR error is the model's test to reference Cmax GMR relative to PBPK's over the four non-reference diagnostic arms. Tmax bias is the median per-subject Tmax minus PK-Sim's. M1d, M2d and the no-lag M1 and M2 variants are in the log and behave like the M3 rows shown. M4 is fitted to two arms at once, so its LL cannot be compared; it failed because release rate changes where the drug is absorbed and so the gut-wall extraction, which breaks the shared-disposition assumption. Estimating the lag in the @delay form gave an infinite likelihood for shapes below 1.</aside>
+</section>

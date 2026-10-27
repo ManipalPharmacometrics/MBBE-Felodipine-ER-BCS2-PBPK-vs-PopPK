@@ -1,0 +1,16 @@
+<section id="progress" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Where we are</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:56px;font-weight:600;line-height:1.15;color:#14213D">The PK-Sim side is finished; the PopPK model is settled</h2>
+<table style="font-size:26px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#E6EAF0"><th style="width:26%">Step</th><th style="width:16%">Status</th><th style="width:58%">Key result</th></tr>
+<tr><td>Reference model</td><td>Done</td><td>OSP Weibull + colonic CYP3A4 50%; Cmax bias ≈ 0.79 accepted</td></tr>
+<tr style="background:#FFFFFF"><td>T50 × shape sweep</td><td>Done</td><td>27 formulations × 100 paired subjects, 0–96 h</td></tr>
+<tr><td>Fed arm (gate #3)</td><td>Limitation</td><td>Model Cmax fed/fasted 0.96 vs 1.6–2.8: fasted claim only</td></tr>
+<tr style="background:#FFFFFF"><td>Dissolution (gate #4)</td><td>Approximate</td><td>USP-consistent; Abrahamsson 1994 tablets within 1.25-fold</td></tr>
+<tr><td>Type I error</td><td>Done</td><td>Calibrated at the boundary; RSABE/ABEL pass 20% / 13%</td></tr>
+<tr style="background:#FFFFFF"><td>PopPK model search</td><td>Done 25 Oct</td><td>12 structures tested; M5 final, M3 fallback</td></tr>
+<tr><td>PBPK vs PopPK</td><td>Done 25 Oct</td><td>Agree along T50 and most of shape; shape 1.465–1.5 missed</td></tr>
+</table>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">project notes §9 · planning notes §9–10 · model_testing_log.pdf</p>
+<aside>Fed: PK-Sim's meal event only slows stomach emptying, so the model gets the direction of the food effect wrong; scope section 6 fallback applied. Dissolution: the reference sits mid-window of the USP limits read through the Abrahamsson correlation, and three real tablets of the platform are reproduced within 1.25-fold. RSABE and ABEL figures are acceptance at a true GMR of exactly 0.80 or 1.25, n = 24. The PopPK rows replace the 16 October 1-compartment result, which agreed only near the reference shape.</aside>
+</section>

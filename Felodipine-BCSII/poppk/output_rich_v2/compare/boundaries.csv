@@ -1,0 +1,25 @@
+axis,source,endpoint,side,bnd,limit,binding
+T50,PBPK,Cmax,low,3.252284483602412,1.25,Cmax
+T50,PBPK,AUC_tEnd,low,,not reached,AUC_tEnd
+T50,PBPK,Joint,low,3.252284483602412,1.25,Cmax
+T50,PBPK,Cmax,high,6.960134726755745,0.80,Cmax
+T50,PBPK,AUC_tEnd,high,,not reached,AUC_tEnd
+T50,PBPK,Joint,high,6.960134726755745,0.80,Cmax
+T50,PopPK,Cmax,low,3.3958628895651253,1.25,Cmax
+T50,PopPK,AUC_tEnd,low,,not reached,AUC_tEnd
+T50,PopPK,Joint,low,3.3958628895651253,1.25,Cmax
+T50,PopPK,Cmax,high,6.829732734847692,0.80,Cmax
+T50,PopPK,AUC_tEnd,high,,not reached,AUC_tEnd
+T50,PopPK,Joint,high,6.829732734847692,0.80,Cmax
+shape,PBPK,Cmax,low,,not reached,Cmax
+shape,PBPK,AUC_tEnd,low,,not reached,AUC_tEnd
+shape,PBPK,Joint,low,,not reached,none
+shape,PBPK,Cmax,high,1.4646632227759657,1.25,Cmax
+shape,PBPK,AUC_tEnd,high,,not reached,AUC_tEnd
+shape,PBPK,Joint,high,1.4646632227759657,1.25,Cmax
+shape,PopPK,Cmax,low,,not reached,Cmax
+shape,PopPK,AUC_tEnd,low,,not reached,AUC_tEnd
+shape,PopPK,Joint,low,,not reached,none
+shape,PopPK,Cmax,high,,not reached,Cmax
+shape,PopPK,AUC_tEnd,high,,not reached,AUC_tEnd
+shape,PopPK,Joint,high,,not reached,none

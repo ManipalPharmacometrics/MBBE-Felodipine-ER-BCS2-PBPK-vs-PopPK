@@ -1,0 +1,14 @@
+<section id="refitout" data-transition="fade" style="background:#F7F6F2;color:#3E4A5C;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:24px;color:#2F6FB0;letter-spacing:2px;text-transform:uppercase;font-weight:600">Fix 1 · outcome</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:600;line-height:1.15;color:#14213D">The refit fixes the early phase, but Cmax does not move</h2>
+<table style="font-size:28px;color:#3E4A5C;border:1px solid #DCE1E8">
+<tr style="background:#E6EAF0"><th style="width:22%"></th><th style="width:13%;text-align:right">Cmax</th><th style="width:13%;text-align:right">AUC</th><th style="width:13%;text-align:right">0–2 h</th><th style="width:13%;text-align:right">2–6 h</th><th style="width:13%;text-align:right">6–12 h</th><th style="width:13%;text-align:right">12–24 h</th></tr>
+<tr><td>Train, shipped</td><td style="text-align:right">0.78</td><td style="text-align:right">1.04</td><td style="text-align:right">1.31</td><td style="text-align:right">0.86</td><td style="text-align:right">1.19</td><td style="text-align:right">1.83</td></tr>
+<tr><td><b>Train, refit</b></td><td style="text-align:right"><b>0.77</b></td><td style="text-align:right">1.07</td><td style="text-align:right"><b>1.02</b></td><td style="text-align:right">0.87</td><td style="text-align:right">1.31</td><td style="text-align:right">1.82</td></tr>
+<tr style="background:#ECEEF1"><td>Test, shipped</td><td style="text-align:right">0.80</td><td style="text-align:right">1.12</td><td style="text-align:right">1.18</td><td style="text-align:right">0.92</td><td style="text-align:right">1.24</td><td style="text-align:right">4.60</td></tr>
+<tr style="background:#ECEEF1"><td><b>Test, refit</b></td><td style="text-align:right"><b>0.79</b></td><td style="text-align:right">1.14</td><td style="text-align:right"><b>0.91</b></td><td style="text-align:right">0.94</td><td style="text-align:right">1.36</td><td style="text-align:right">4.74</td></tr>
+</table>
+<p style="font-size:30px;line-height:1.45;width:1600px">Fitted peak: 4.57 nM at 4.0 h, against 4.60 nM at 3.0 h shipped. Release can't raise the peak: faster release moves it earlier, which the early data rule out, and the tail stays high whatever release does. <b>So the cause sits outside the formulation.</b></p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7585">Values are geometric-mean pred/obs · fitted curve from Confidence Interval.xlsx · project notes §9.2</p>
+<aside>tmax now matches the data at 4 h, which is a real improvement. But the objective function weighs every log-scaled point equally, and the best compromise leaves the peak where it was. The observed profiles peak higher and fall faster at about the same AUC. Changing the input rate alone cannot produce that, which points to disposition.</aside>
+</section>
