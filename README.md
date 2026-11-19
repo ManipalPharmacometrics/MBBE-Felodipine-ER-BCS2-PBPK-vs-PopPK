@@ -26,6 +26,7 @@ identical BE code on the PK-Sim endpoints and on the PopPK endpoints.
 | 6 | `step6_type1_error.jl` | BE boundary on each axis and the type I error there | `step6_boundaries.csv`, `step6_type1_error.csv`, `step6_tost_control.csv`, `step6_scaled_at_boundary.csv`, figures |
 | 6b | `step6b_check_vs_pumas_be.jl` | Cross-check: our fast ABE, RSABE and ABEL tests vs `pumas_be` on the same simulated trials, at every boundary | `step6b_check_vs_pumas_be.csv` |
 | 7 | `step7_ivivc.jl` | IVIVC check: PopPK release (effective T50 and shape) vs the PK-Sim release (branch `ivivc-qc`) | `step7_ivivc.csv`, `step7_ivivc_fit.csv`, `fig_step7_ivivc.png` |
+| 9 | `step9_one_test_formulation.jl` | Fit to the reference + ONE test formulation (T50 7.17 h, or shape 1.2), predict all 27 (uses `model_known_release.jl`) | `one_test/step9_*.csv`, `one_test/fig_step9_gmr.png` |
 
 Inputs are in `data/pksim_exports/`: for each formulation, the PK-Sim population profiles
 (`-Results.csv`) and PK-Sim's own NCA (`-PK-Analyses.csv`). The file name gives the formulation,
@@ -152,6 +153,70 @@ PK-Sim T50, but only half as fast, and it is about twice as long (reference: 9.3
 for BE (steps 4–6), but its release parameters are not the PK-Sim release, so they should not be
 read as an in vivo release estimate. This is better than metformin, where the PopPK release time
 does not follow T50 at all (slope ≈ 0).
+
+## Step 9: one tested formulation → BE for all 27 (19 Nov 2026)
+
+Can PopPK predict BE for formulations that were never tested, as a real program would need? A BE
+study has the reference plus ONE test formulation. Step 9 fits a model to those two arms only
+and predicts the other 25.
+
+**Model (`model_known_release.jl`).** The release is not estimated: it is each formulation's own
+PK-Sim dissolution curve (Weibull T50 and shape, 0.3113 h lag). The model estimates what comes
+after release: absorption (ka); gut-wall availability that changes as the tablet moves from the
+small intestine to the colon, `r(t) = 1 + (R − 1)(1 − exp(−t/τ))`, because felodipine is a CYP3A4
+substrate and gut-wall CYP3A4 falls along the gut; and 2-compartment disposition. τ is fixed at
+2, 3.5 and 5 h. Estimated freely it ran to ~0.2 h, where R only scales availability and trades off
+against CL and the volumes.
+
+**Two tested formulations:** T50 7.17 h (slower release, just past PBPK's upper boundary) or
+shape 1.2 at T50 4.78 h. Benchmark: M5 fitted separately to all 27 (steps 2–6).
+
+| Tested | τ (h) | −2LL | R | CL (L/h) | Same BE decision as PBPK: ABE / RSABE / ABEL (of 27) | Too lenient (ABE, RSABE, ABEL) |
+|---|---|---|---|---|---|---|
+| T50 7.17 h | 2 | 4519 | 5×10⁶ (degenerate) | 1.5×10⁹ | 18 / 18 / 16 | 5, 5, 7 |
+| T50 7.17 h | **3.5** | **4151** | **1.94** | **554** | **26 / 27 / 26** | **1, 0, 1** |
+| T50 7.17 h | 5 | 4178 | 1.87 | 532 | 27 / 27 / 26 | 0, 0, 1 |
+| shape 1.2 | 2 | 1462 | → 0 | 43 | 20 / 18 / 20 | 2, 2, 2 |
+| shape 1.2 | 3.5 | 1487 | → 0 | 74 | 20 / 18 / 21 | 3, 2, 2 |
+| shape 1.2 | 5 | 1562 | → 0 | 96 | 20 / 18 / 20 | 4, 3, 3 |
+| M5, all 27 fitted | — | — | — | — | 26 / 23 / 26 | 0, 1, 0 |
+
+(−2LL compares τ values within a row group only; the two tested formulations are different data.)
+
+GMR error against PBPK over all 27 formulations (median / largest):
+
+| | Cmax | AUC 0–96 h |
+|---|---|---|
+| Tested T50 7.17 h, τ 3.5 | 0.6% / 4.4% | 3.1% / 13.7% (at T50 9.56 h) |
+| Tested shape 1.2, τ 3.5 | 6.7% / 43.7% | 17.0% / 39.5% |
+| M5, all 27 fitted | 1.3% / 3.3% | 0.4% / 0.8% |
+
+Boundaries and the true (PBPK) pass rate there, n = 54 (5% = well placed; above = too strict):
+
+| Axis, side | PBPK | Tested T50 7.17 h, τ 3.5 | Tested shape 1.2, τ 3.5 | M5, all 27 |
+|---|---|---|---|---|
+| T50, low | 3.25 (5.0%) | 3.26 (5.2%) | 3.35 (8.0%) | 3.27 (5.6%) |
+| T50, high | 6.96 (4.5%) | 6.91 (5.2%) | 6.73 (8.5%) | 6.86 (6.0%) |
+| shape, low | not reached | not reached | 0.54 (21%) | not reached |
+| shape, high | 1.46 (4.9%) | 1.40 (10.5%) | 1.15 (59%) | not reached |
+
+**What this shows:**
+- **Tested on the T50 axis, the model predicts all 27 formulations**, including the shape axis it
+  never saw. BE decisions match PBPK for 26–27 of 27, the T50 boundaries are within 0.05 h, and
+  the true pass rate there is 5.2%. That is as good as M5 fitted to every formulation. R = 1.9:
+  drug absorbed late is about twice as available, as expected from lower CYP3A4 in the colon.
+- **Tested on the shape axis, it fails.** R collapses to 0, and the shape effect is absorbed by the
+  per-subject random effects of the tested arm. Even the tested formulation's own Cmax GMR is
+  mispredicted (0.78 against 1.12), and 2–4 formulations per method are called BE wrongly.
+  Refitting from the T50 case's estimates converged to a much worse optimum (−2LL 2689 against
+  1487), so this is not a fitting accident.
+- **So, unlike metformin, felodipine can be extrapolated, but only if the tested formulation
+  releases at a different rate (T50).** A slower-release test shows how much late-released drug
+  is absorbed and how available it is, which every other formulation depends on. A shape-only
+  test barely moves late release, so the model cannot learn it.
+- **Caveat:** the regional-availability term carries mechanistic knowledge (gut-wall CYP3A4 by
+  region) that the PK-Sim model also contains. No PBPK simulations of the untested formulations
+  were used, but the model structure was informed by how the drug behaves.
 
 Not in this branch: the interpolated 2-D safe-space map, sparse sampling, the fed-state
 sensitivity, and the PK-Sim model build.
