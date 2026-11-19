@@ -1,0 +1,58 @@
+┌ Warning: Assignment to `a` in soft scope is ambiguous because a global variable by the same name exists: `a` will be treated as a new local. Disambiguate by using `local a` to suppress this warning or `global a` to assign to the existing global variable.
+└ @ /mnt/data/code/ManipalPharmacometrics/qc-worktrees/felodipine-poppk-qc/step6_type1_error.jl:117
+Boundaries:
+24×7 DataFrame
+ Row │ axis    source  endpoint  side    boundary       limit        binding
+     │ String  String  String    String  Float64?       String       String
+─────┼────────────────────────────────────────────────────────────────────────
+   1 │ T50     PBPK    Cmax      low           3.25228  1.25         Cmax
+   2 │ T50     PBPK    AUC_tEnd  low     missing        not reached  AUC_tEnd
+   3 │ T50     PBPK    Joint     low           3.25228  1.25         Cmax
+   4 │ T50     PBPK    Cmax      high          6.96013  0.80         Cmax
+   5 │ T50     PBPK    AUC_tEnd  high    missing        not reached  AUC_tEnd
+   6 │ T50     PBPK    Joint     high          6.96013  0.80         Cmax
+   7 │ T50     PopPK   Cmax      low           3.27499  1.25         Cmax
+   8 │ T50     PopPK   AUC_tEnd  low     missing        not reached  AUC_tEnd
+   9 │ T50     PopPK   Joint     low           3.27499  1.25         Cmax
+  10 │ T50     PopPK   Cmax      high          6.85948  0.80         Cmax
+  11 │ T50     PopPK   AUC_tEnd  high    missing        not reached  AUC_tEnd
+  12 │ T50     PopPK   Joint     high          6.85948  0.80         Cmax
+  13 │ shape   PBPK    Cmax      low     missing        not reached  Cmax
+  14 │ shape   PBPK    AUC_tEnd  low     missing        not reached  AUC_tEnd
+  15 │ shape   PBPK    Joint     low     missing        not reached  none
+  16 │ shape   PBPK    Cmax      high          1.46466  1.25         Cmax
+  17 │ shape   PBPK    AUC_tEnd  high    missing        not reached  AUC_tEnd
+  18 │ shape   PBPK    Joint     high          1.46466  1.25         Cmax
+  19 │ shape   PopPK   Cmax      low     missing        not reached  Cmax
+  20 │ shape   PopPK   AUC_tEnd  low     missing        not reached  AUC_tEnd
+  21 │ shape   PopPK   Joint     low     missing        not reached  none
+  22 │ shape   PopPK   Cmax      high    missing        not reached  Cmax
+  23 │ shape   PopPK   AUC_tEnd  high    missing        not reached  AUC_tEnd
+  24 │ shape   PopPK   Joint     high    missing        not reached  none
+
+Type I error:
+20×9 DataFrame
+ Row │ axis    endpoint  side    n_subj  judged_by  own_boundary  type1_own  o ⋯
+     │ String  String    String  Int64   String     Float64       Float64    F ⋯
+─────┼──────────────────────────────────────────────────────────────────────────
+   1 │ T50     Cmax      low         24  PBPK            3.25228    0.0491     ⋯
+   2 │ T50     Cmax      low         24  PopPK           3.27499    0.04875
+   3 │ T50     Cmax      low         54  PBPK            3.25228    0.0514
+   4 │ T50     Cmax      low         54  PopPK           3.27499    0.05055
+   5 │ T50     Cmax      high        24  PBPK            6.96013    0.04695    ⋯
+   6 │ T50     Cmax      high        24  PopPK           6.85948    0.04595
+   7 │ T50     Cmax      high        54  PBPK            6.96013    0.0498
+   8 │ T50     Cmax      high        54  PopPK           6.85948    0.04915
+   9 │ T50     Joint     low         24  PBPK            3.25228    0.03785    ⋯
+  10 │ T50     Joint     low         24  PopPK           3.27499    0.0362
+  11 │ T50     Joint     low         54  PBPK            3.25228    0.04955
+  12 │ T50     Joint     low         54  PopPK           3.27499    0.05045
+  13 │ T50     Joint     high        24  PBPK            6.96013    0.03705    ⋯
+  14 │ T50     Joint     high        24  PopPK           6.85948    0.03745
+  15 │ T50     Joint     high        54  PBPK            6.96013    0.04545
+  16 │ T50     Joint     high        54  PopPK           6.85948    0.0448
+  17 │ shape   Cmax      high        24  PBPK            1.46466    0.049      ⋯
+  18 │ shape   Cmax      high        54  PBPK            1.46466    0.0508
+  19 │ shape   Joint     high        24  PBPK            1.46466    0.0331
+  20 │ shape   Joint     high        54  PBPK            1.46466    0.0486
+                                                               2 columns omitted
