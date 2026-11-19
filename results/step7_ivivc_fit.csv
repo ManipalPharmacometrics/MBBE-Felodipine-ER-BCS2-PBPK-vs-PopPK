@@ -1,0 +1,3 @@
+analysis,slope,ci_lower,ci_upper,ivivc_would_give
+T50 axis: log(PopPK T50) on log(PK-Sim T50),0.5248734264586389,0.3307962578865599,0.7189505950307178,1.0
+shape axis: PopPK shape on PK-Sim shape,-0.05802572986518762,-0.44466887877688227,0.32861741904650704,1.0

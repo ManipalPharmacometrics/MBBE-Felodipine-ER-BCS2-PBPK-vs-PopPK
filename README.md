@@ -25,6 +25,7 @@ identical BE code on the PK-Sim endpoints and on the PopPK endpoints.
 | 5 | `step5_power_safe_space.jl` | Power per formulation (ABE n = 54; RSABE/ABEL n = 24) and along the two axes | `step5_power_by_formulation.csv`, `step5_power_axes.csv`, figure |
 | 6 | `step6_type1_error.jl` | BE boundary on each axis and the type I error there | `step6_boundaries.csv`, `step6_type1_error.csv`, `step6_tost_control.csv`, `step6_scaled_at_boundary.csv`, figures |
 | 6b | `step6b_check_vs_pumas_be.jl` | Cross-check: our fast ABE, RSABE and ABEL tests vs `pumas_be` on the same simulated trials, at every boundary | `step6b_check_vs_pumas_be.csv` |
+| 7 | `step7_ivivc.jl` | IVIVC check: PopPK release (effective T50 and shape) vs the PK-Sim release (branch `ivivc-qc`) | `step7_ivivc.csv`, `step7_ivivc_fit.csv`, `fig_step7_ivivc.png` |
 
 Inputs are in `data/pksim_exports/`: for each formulation, the PK-Sim population profiles
 (`-Results.csv`) and PK-Sim's own NCA (`-PK-Analyses.csv`). The file name gives the formulation,
@@ -132,6 +133,25 @@ same for PBPK and PopPK. That is by design: they widen the limits for a highly v
 5. `be_functions.jl`: the trial simulation, RSABE (FDA) and ABEL (EMA) rules, and the
    interpolation along an axis; `step6b` shows the tests agree with `pumas_be`.
 6. `step6`: the TOST control passes about 5% (reference × 0.80).
+
+## Step 7: how PopPK relates to PBPK (IVIVC check)
+
+Does the PopPK release follow the release set in PK-Sim? M5 releases through two Weibull
+components, so its release curve as a whole is summarised (lag excluded): effective T50 = time to
+50% released; effective shape = the single-Weibull shape through 25% and 75% released.
+
+| | Slope | 95% CI | An IVIVC would give |
+|---|---|---|---|
+| T50 axis (shape 0.764): log(PopPK T50) on log(PK-Sim T50) | 0.52 | 0.33 to 0.72 | 1 |
+| Shape axis (T50 4.78 h): PopPK shape on PK-Sim shape | −0.06 | −0.44 to 0.33 | 1 |
+
+**Result: a partial IVIVC on T50, none on shape.** The PopPK release time does rise with the
+PK-Sim T50, but only half as fast, and it is about twice as long (reference: 9.3 h against
+4.78 h). The release shape is not recovered at all, and the fast/slow mix (fraction_fast,
+0.02–0.97) jumps between formulations. M5 reproduces each formulation's Cmax and AUC well enough
+for BE (steps 4–6), but its release parameters are not the PK-Sim release, so they should not be
+read as an in vivo release estimate. This is better than metformin, where the PopPK release time
+does not follow T50 at all (slope ≈ 0).
 
 Not in this branch: the interpolated 2-D safe-space map, sparse sampling, the fed-state
 sensitivity, and the PK-Sim model build.
