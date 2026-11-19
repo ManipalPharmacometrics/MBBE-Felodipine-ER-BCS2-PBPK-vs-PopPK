@@ -1,0 +1,43 @@
+done 7.17_0.764
+done 4.78_0.9
+done 4.07_1.0
+done 5.74_1.0
+done 4.07_1.2
+done 5.74_1.2
+done 6.88_1.2
+[ Info: Fitting T50 = 7.17 h, shape = 0.764
+[ Info: Checking the initial parameter values.
+[ Info: The initial negative log likelihood and its gradient are finite. Check passed.
+[ Info: Calculating: variance-covariance matrix.
+[ Info: Done.
+[ Info: Fitting T50 = 4.78 h, shape = 0.9
+[ Info: Checking the initial parameter values.
+[ Info: The initial negative log likelihood and its gradient are finite. Check passed.
+[ Info: Calculating: variance-covariance matrix.
+[ Info: Done.
+[ Info: Fitting T50 = 4.07 h, shape = 1.0
+[ Info: Checking the initial parameter values.
+[ Info: The initial negative log likelihood and its gradient are finite. Check passed.
+[ Info: Calculating: variance-covariance matrix.
+[ Info: Done.
+[ Info: Fitting T50 = 5.74 h, shape = 1.0
+[ Info: Checking the initial parameter values.
+[ Info: The initial negative log likelihood and its gradient are finite. Check passed.
+[ Info: Calculating: variance-covariance matrix.
+[ Info: Done.
+[ Info: Fitting T50 = 4.07 h, shape = 1.2
+[ Info: Checking the initial parameter values.
+[ Info: The initial negative log likelihood and its gradient are finite. Check passed.
+[ Info: Calculating: variance-covariance matrix.
+[ Info: Done.
+[ Info: Fitting T50 = 5.74 h, shape = 1.2
+[ Info: Checking the initial parameter values.
+[ Info: The initial negative log likelihood and its gradient are finite. Check passed.
+[ Info: Calculating: variance-covariance matrix.
+[ Info: Done.
+[ Info: Fitting T50 = 6.88 h, shape = 1.2
+[ Info: Checking the initial parameter values.
+[ Info: The initial negative log likelihood and its gradient are finite. Check passed.
+[ Info: Calculating: variance-covariance matrix.
+[ Info: Done.
+Wrote results/step2_parameters.csv
